@@ -14,6 +14,7 @@
   SS.examPrep = {
     lead: T`Bölüm 1’de sorulabilecek bütün soru tipleri burada. Önce tabloya bak: hangi tipte zorlanıyorsan o dersin <strong>çözüm reçetesine</strong> dön. Sonra deneme sorularını kâğıt kalemle çöz ve adımları <em>ancak takıldığında</em> aç. Sorular notun örnekleriyle aynı tarzda ama yeni sorulardır.`,
     blocks: [
+      { t: 'def', title: 'Sınav formatında pratik', h: T`Hocanın vizesi 3 ana soru ve altlarında 1.1, 1.2… gibi alt sorulardan oluşacak. Bu formatta hazırlanmış 4 tam deneme için <a href="#/deneme"><strong>Deneme vizeleri</strong></a> sayfasına git (Schaum kitabının Bölüm 1 problemleri, Türkçe ve çözümlü). Bu sayfadaki sorular ise konu konu ısınma içindir.` },
       { t: 'h', h: 'Soru tipleri haritası' },
       { t: 'table', head: ['Soru tipi', 'Ders', 'Akılda tutulacak tek cümle'], rows: [
         ['Periyodik mi? Temel periyot?', L('1.2'), T`$T_i = 2\pi/\omega_i$. Oranlar rasyonelse periyodik, $T_0$ = EKOK. Kısa yol: $\omega_0 = $ EBOB.`],

@@ -32,7 +32,7 @@
   const SYM = {
     infty: '∞', partial: '∂', forall: '∀', exists: '∃', ldots: '…', cdots: '⋯', dots: '…', vdots: '⋮',
     prime: '′', mid: '|', lvert: '|', rvert: '|', langle: '⟨', rangle: '⟩', uparrow: '↑', downarrow: '↓',
-    checkmark: '✓', emptyset: '∅', nabla: '∇', angle: '∠', degree: '°', ell: 'ℓ', Re: 'Re', Im: 'Im'
+    checkmark: '✓', nearrow: '↗', searrow: '↘', emptyset: '∅', nabla: '∇', angle: '∠', degree: '°', ell: 'ℓ', Re: 'Re', Im: 'Im'
   };
   const SPACE = { quad: ' ', qquad: '  ', ',': ' ', ';': ' ', ':': ' ', ' ': ' ', '!': '' };
   const FUN = new Set(['sin', 'cos', 'tan', 'cot', 'sec', 'csc', 'log', 'ln', 'exp', 'max', 'min', 'sgn', 'sinc',

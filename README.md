@@ -29,6 +29,8 @@ Vize kapsamı Bölüm 1’dir; Bölüm 2 sitede “vize dışı” olarak işare
 
 Her derste ayrıca bir **çözüm reçetesi** (o soru tipinin adım adım yöntemi) ve **dikkat** kutuları (sık yapılan hatalar) bulunur.
 
+**Deneme vizeleri** sayfasında hocanın sınav formatında (3 ana soru, altında 1.1, 1.2… alt sorular) hazırlanmış 4 tam deneme vardır. Sorular, ders notunun da dayandığı H. Hsu, *Schaum’s Outline of Signals and Systems* (2. baskı) kitabının 1. bölümünden vize kapsamına girenler seçilerek Türkçeleştirildi ve adım adım çözüldü. Her alt sorunun altında konunun anlatıldığı derse bağlantı bulunur.
+
 **Vize hazırlık** sayfasında Bölüm 1’in bütün soru tiplerinin haritası, en çok puan kaybettiren hatalar ve notun tarzında yeni deneme soruları vardır. **Formül kağıdı** sınav öncesi tek sayfalık özettir.
 
 ## Laboratuvarlar
@@ -103,6 +105,7 @@ js/
   content/ch2-lti-b.js      dersler 2.5–2.7
   content/formulas.js       formül kağıdı
   content/vize.js           vize hazırlık: soru tipleri haritası ve deneme soruları
+  content/deneme.js         deneme vizeleri (Schaum Bölüm 1 problemleri, Türkçe ve çözümlü)
   app.js                    yönlendirme, ders sayfası, ilerleme
 ```
 

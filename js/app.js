@@ -58,6 +58,7 @@
     const top = [
       ['#/', '★', 'Başlangıç', route === 'home'],
       ['#/vize', '✎', 'Vize hazırlık', route === 'vize'],
+      ['#/deneme', '⏱', 'Deneme vizeleri', route === 'deneme'],
       ['#/formuller', '∑', 'Formül kağıdı', route === 'formuller'],
       ['#/lab', '⚗', 'Laboratuvarlar', route === 'lab']
     ];
@@ -105,11 +106,14 @@
   }
 
   function stepCard(b, kind) {
-    const isHw = kind === 'hw';
-    const card = el('article', { class: 'card' });
+    const isQ = kind === 'q';
+    const isHw = kind === 'hw' || isQ;
+    const card = el('article', { class: 'card' + (isQ ? ' card-q' : '') });
     card.append(el('div', { class: 'card-head' },
-      el('span', { class: 'tag ' + (isHw ? 'tag-hw' : 'tag-ex') }, isHw ? 'Ödev' : 'Çözümlü örnek'),
+      el('span', { class: 'tag ' + (isQ ? 'tag-q' : isHw ? 'tag-hw' : 'tag-ex') }, isQ ? b.no : isHw ? 'Ödev' : 'Çözümlü örnek'),
       b.title ? el('span', { class: 'card-title', html: R(b.title) }) : null,
+      b.pts ? el('span', { class: 'tag tag-pts' }, b.pts + ' puan') : null,
+      b.ref ? el('span', { class: 'tag tag-src' }, 'Kaynak: Schaum ' + b.ref) : null,
       b.src ? el('span', { class: 'tag tag-src' }, 'Not ' + b.src) : null));
     const body = el('div', { class: 'card-body' });
     body.append(el('div', { class: 'card-q', html: R(b.q) }));
@@ -230,6 +234,11 @@
       case 'fig': return figs(b.fig, b.cap);
       case 'example': return stepCard(b, 'ex');
       case 'hw': return stepCard(b, 'hw');
+      case 'q': return stepCard(b, 'q');
+      case 'mq': return el('div', { class: 'mq' },
+        el('div', { class: 'mq-no' }, 'SORU ' + b.no),
+        el('div', { class: 'mq-body' }, el('h2', { class: 'mq-title', html: R(b.title) }), b.h ? el('p', { class: 'mq-desc', html: R(b.h) }) : null),
+        b.pts ? el('div', { class: 'mq-pts' }, b.pts + ' puan') : null);
       case 'quiz': return quiz(b, lesson ? lesson.id : 'x');
       case 'lab': {
         const holder = el('div');
@@ -311,6 +320,7 @@
     const cta = el('div', { class: 'cta-row' });
     if (firstUndone) cta.append(el('a', { class: 'btn btn-primary', href: '#/ders/' + firstUndone.id }, (Object.keys(progress.done).some((k) => progress.done[k]) ? 'Kaldığın yerden devam et: ' : 'Başla: ') + firstUndone.id + ' ' + firstUndone.title));
     cta.append(el('a', { class: 'btn', href: '#/vize' }, 'Vize hazırlık'));
+    cta.append(el('a', { class: 'btn', href: '#/deneme' }, 'Deneme vizeleri'));
     cta.append(el('a', { class: 'btn', href: '#/formuller' }, 'Formül kağıdı'));
     cta.append(el('a', { class: 'btn', href: '#/lab' }, 'Tüm laboratuvarlar'));
     hero.append(cta);
@@ -418,6 +428,50 @@
     return page;
   }
 
+  function pageDeneme(id) {
+    const sets = SS.examSets || [];
+    const page = el('div', { class: 'page' });
+    const ex = sets.find((s) => s.id === id);
+    if (!ex) {
+      page.append(el('div', { class: 'crumb' }, el('span', { class: 'pill pill-ok' }, 'Bölüm 1 · vize formatı')));
+      page.append(el('h1', null, 'Deneme vizeleri'));
+      page.append(el('p', { class: 'lead', html: R(SS.examIntro || '') }));
+      const grid = el('div', { class: 'lessons' });
+      sets.forEach((s) => grid.append(el('a', { class: 'lesson-card', href: '#/deneme/' + s.id },
+        el('span', { class: 'lc-num' }, 'Deneme ' + s.id + ' · ' + s.questions.reduce((n, q) => n + q.items.length, 0) + ' alt soru'),
+        el('span', { class: 'lc-title', html: R(s.title) }),
+        el('span', { class: 'lc-sub', html: R(s.questions.map((q) => q.no + '. ' + q.title).join(' · ')) }))));
+      page.append(grid);
+      page.append(box('box-idea', 'Nasıl kullanılır?', 'Bir denemeyi gerçek sınav gibi çöz: süre tut (75 dakika öner), kâğıt kalemle bütün alt soruları bitir, <strong>sonra</strong> çözümleri aç. Yanlış yaptığın her alt sorunun altında, konunun anlatıldığı derse bağlantı var.'));
+      document.title = 'Deneme vizeleri · Sinyal Defteri';
+      return page;
+    }
+    page.append(el('div', { class: 'crumb' }, el('a', { href: '#/deneme' }, '← Tüm denemeler'), el('span', null, '·'), el('span', { class: 'pill pill-ok' }, 'Vize formatı: 3 ana soru')));
+    page.append(el('h1', { html: R('Deneme vizesi ' + ex.id + ': ' + ex.title) }));
+    page.append(el('p', { class: 'lead', html: R(ex.blurb) }));
+    const bar = el('div', { class: 'card-actions' });
+    bar.append(SS.ui.button('Bütün çözümleri aç', () => page.querySelectorAll('.card-q').forEach((c) => { const b = [...c.querySelectorAll('button')].find((x) => x.textContent === 'Tümünü göster' && x.style.display !== 'none'); if (b) b.click(); }), ''),
+      SS.ui.button('Bütün çözümleri gizle', () => page.querySelectorAll('.card-q').forEach((c) => { const b = [...c.querySelectorAll('button')].find((x) => x.textContent === 'Gizle' && x.style.display !== 'none'); if (b) b.click(); }), 'btn-quiet'),
+      el('span', { class: 'think' }, 'Kaynak: H. Hsu, Schaum’s Outline of Signals and Systems (2. baskı), Bölüm 1. Sorular Türkçeleştirildi, çözümler adım adım yeniden yazıldı.'));
+    page.append(bar);
+    for (const q of ex.questions) {
+      page.append(renderBlock({ t: 'mq', no: q.no, title: q.title, pts: q.pts, h: q.h }));
+      for (const it of q.items) {
+        const card = renderBlock(Object.assign({ t: 'q' }, it));
+        if (it.lesson) card.querySelector('.card-body').append(el('p', { class: 'think', style: { marginTop: '10px' }, html: 'Konu tekrarı: <a href="#/ders/' + it.lesson + '">Ders ' + it.lesson + '</a>' }));
+        page.append(card);
+      }
+    }
+    const sets2 = sets.map((s) => s.id);
+    const i = sets2.indexOf(ex.id);
+    const pager = el('nav', { class: 'pager' });
+    if (i > 0) pager.append(el('a', { href: '#/deneme/' + sets2[i - 1] }, el('small', null, '← Önceki'), 'Deneme ' + sets2[i - 1]));
+    if (i < sets2.length - 1) pager.append(el('a', { class: 'next', href: '#/deneme/' + sets2[i + 1] }, el('small', null, 'Sonraki →'), 'Deneme ' + sets2[i + 1]));
+    page.append(el('div', { class: 'lesson-foot' }, pager));
+    document.title = 'Deneme ' + ex.id + ' · Sinyal Defteri';
+    return page;
+  }
+
   function pageNotFound() {
     return el('div', { class: 'page' }, el('h1', null, 'Sayfa bulunamadı'), el('p', null, el('a', { href: '#/' }, 'Ana sayfaya dön')));
   }
@@ -432,6 +486,7 @@
     else if (parts[0] === 'ders') { node = pageLesson(decodeURIComponent(parts[1] || '')); key = 'ders/' + parts[1]; }
     else if (parts[0] === 'formuller') { node = pageFormulas(); key = 'formuller'; }
     else if (parts[0] === 'vize') { node = pageVize(); key = 'vize'; }
+    else if (parts[0] === 'deneme') { node = pageDeneme(parts[1]); key = 'deneme'; }
     else if (parts[0] === 'lab') { node = pageLabs(parts[1]); key = 'lab'; }
     else { node = pageNotFound(); key = '404'; }
     main.innerHTML = '';

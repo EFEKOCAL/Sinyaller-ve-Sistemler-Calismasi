@@ -176,6 +176,14 @@ canvas.plot { display: block; width: 100%; }
 .tag-hw { background: color-mix(in srgb, var(--c-h) 16%, transparent); color: var(--c-h); }
 .tag-src { color: var(--muted); font-weight: 500; letter-spacing: 0; text-transform: none; font-size: 12.5px; padding: 0; }
 .card-title { font-weight: 600; font-size: 15px; }
+.tag-q { background: var(--c-acc); color: #fff; font-size: 13px; letter-spacing: 0; }
+.tag-pts { border: 1px solid var(--line); color: var(--ink-2); text-transform: none; letter-spacing: 0; font-weight: 600; }
+.mq { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; margin: 40px 0 6px; padding: 14px 18px; border-radius: 14px; background: color-mix(in srgb, var(--c-acc) 9%, var(--surface)); border: 1px solid color-mix(in srgb, var(--c-acc) 30%, var(--line)); }
+.mq-no { font-weight: 800; font-size: 13px; letter-spacing: .08em; color: #fff; background: var(--c-acc); border-radius: 8px; padding: 6px 10px; white-space: nowrap; }
+.page .mq-title { margin: 0; font-size: 20px; }
+.mq-desc { margin: 4px 0 0; font-size: 14.5px; color: var(--ink-2); }
+.mq-pts { font-weight: 700; color: var(--c-acc); white-space: nowrap; }
+@media (max-width: 600px) { .mq { grid-template-columns: 1fr; } }
 .card-body { padding: 14px 18px; }
 .card-q { margin-bottom: 8px; }
 .steps { list-style: none; padding: 0; margin: 8px 0 0; counter-reset: s; }
