@@ -139,7 +139,7 @@
         ans: T`Periyodik, $N_0 = 8$. (Dikkat: $\cos(\pi n/8)$’in periyodu 16, karesininki ise 8.)` },
       { t: 'lab', id: 'periodic', opts: { tab: 1 } },
       { t: 'hw', src: 's. 15', q: T`$x[n] = e^{j\left(\frac{2\pi}{3}\right)n} + e^{j\left(\frac{3\pi}{4}\right)n}$ periyodik mi? Periyodikse temel periyodu nedir?`, hint: T`Her terim için $\frac{\Omega}{2\pi}$’yi sadeleştir; paydalar $N_1$ ve $N_2$’dir.`,
-        steps: [T`$\frac{2\pi/3}{2\pi} = \frac13$ → $N_1 = 3$`, T`$\frac{3\pi/4}{2\pi} = \frac38$ → $N_2 = 8$`, T`İkisi de periyodik; toplamın periyodu EKOK(3, 8) = 24.`], ans: T`Periyodik, $N_0 = 24$` },
+        steps: [T`$\frac{2\pi/3}{2\pi} = \frac13 = \frac{m}{N}$ → $N_1 = 3$ (payda)`, T`$\frac{3\pi/4}{2\pi} = \frac38 = \frac{m}{N}$ → $N_2 = 8$. Dikkat: $\frac38$ periyot değildir, $\frac{m}{N}$ oranıdır. Periyot sadeleşmiş kesrin <strong>paydasıdır</strong> ($m = 3$, $N = 8$). Kontrol: $\frac{3\pi}{4}\cdot 8 = 6\pi = 3\cdot 2\pi$ ✓. Ayrık periyot her zaman tam sayıdır, $\frac38$ olamaz.`, T`İkisi de periyodik; toplamın periyodu EKOK(3, 8) = 24.`], ans: T`Periyodik, $N_0 = 24$` },
       { t: 'quiz', items: [
         { q: T`$x(t) = \sin(3t) + \cos(\pi t)$ periyodik midir?`, opts: ['Evet, $T_0 = 2\\pi$', 'Evet, $T_0 = 6$', 'Hayır'], a: 2, why: T`$T_1 = 2\pi/3$, $T_2 = 2$. Oran $\pi/3$ irrasyonel: periyodik değil.` },
         { q: T`$x[n] = \cos(0.4\pi n)$ dizisinin temel periyodu nedir?`, opts: ['5', '$5\\pi$', '2.5'], a: 0, why: T`$\frac{0.4\pi}{2\pi} = \frac{1}{5}$ → $N = 5$.` },

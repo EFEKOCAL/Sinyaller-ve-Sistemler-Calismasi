@@ -3,12 +3,14 @@
  *
  * Her beceri için rastgele ama doğrulanabilir sorular üretir. Bir soru grubu:
  *   { stem: html, parts: [ { skill, q: html, opts: [html], a: doğru indeks, why: html } ] }
+ * Grup isteğe bağlı bir şekil taşıyabilir: { fig: plot spec } (soru kökünün altına çizilir).
  * Tek beceri sorularında tek parça, sistem analizi ve karma (sınav tipi) sorularda birden çok parça vardır.
  *
  * Beceriler (vize kapsamı, Bölüm 1):
  *   perC  sürekli sinüs toplamının temel periyodu      perD  ayrık sinüsün temel periyodu
  *   ep    enerji / güç sınıfı ve değeri                eo    çift / tek / hiçbiri
  *   delta δ'lı integral                                tf    x(ct+d) hangi aralıkta?
+ *   step  grafiği basamak / rampa ile yazma, türevi
  *   lin   lineer mi?   ti  ötelemeyle değişmez mi?     caus  nedensel mi?   stab  kararlı mı?
  */
 (function (root) {
@@ -269,6 +271,82 @@
       why: 'İçerideki ifadeyi eşitsizliğe koy: ' + m(a + ' < ' + arg + ' < ' + b) + '. ' + (d ? 'Önce ' + m(String(d)) + '’' + 'i karşıya at: ' + m((a - d) + ' < ' + (c.d === 1 ? ct + 't' : ct) + ' < ' + (b - d)) + '. ' : '') + (feq(c, F(1)) ? '' : 'Sonra ' + m(texF(c)) + ' ile böl' + (neg ? ' (negatif sayıyla bölünce eşitsizlik <strong>yön değiştirir</strong>)' : '') + ': ') + correct + '. Kritik nokta kuralı: ' + m('t_k \\to \\frac{t_k - d}{c}') + '.' }], _lo: fval(lo), _hi: fval(hi), _c: fval(c), _d: d, _a: a, _b: b };
   }
 
+  /* ================= Grafiği basamak / rampa ile yazma ================= */
+  // Grup bir şekil taşır: { fig: plot spec }. Şekildeki fonksiyonlar saf JS; Node testinde _f ile doğrulanır.
+  const argT = (t0) => 't' + (t0 === 0 ? '' : t0 > 0 ? '-' + t0 : '+' + -t0);
+  // terms: [{c, t0}] → "2u(t+1) - u(t-1) ..."
+  function combTex(terms, fnm) {
+    const ts = merge(terms); // sıralı ve birleşik: aynı sinyalin farklı yazılışları aynı metni verir
+    if (!ts.length) return '0';
+    return ts.map((x, i) => {
+      const a = Math.abs(x.c), body = (a === 1 ? '' : a) + fnm + '(' + argT(x.t0) + ')';
+      return i === 0 ? (x.c < 0 ? '-' : '') + body : (x.c < 0 ? ' - ' : ' + ') + body;
+    }).join('');
+  }
+  // Eşit t0'lı terimleri birleştir
+  function merge(terms) {
+    const mp = new Map();
+    terms.forEach((x) => mp.set(x.t0, (mp.get(x.t0) || 0) + x.c));
+    return [...mp.entries()].sort((a, b) => a[0] - b[0]).map(([t0, c]) => ({ c, t0 })).filter((x) => x.c !== 0);
+  }
+  const uf = (t) => (t >= 0 ? 1 : 0), rf = (t) => (t > 0 ? t : 0);
+  const evalTerms = (terms, g) => (t) => terms.reduce((s, x) => s + x.c * g(t - x.t0), 0);
+  const figSpec = (f, xr, yr, title) => ({ x: xr, y: yr, h: 190, xLabel: 't', xStep: 1, yStep: 1, title, layers: [{ kind: 'fn', f, color: 'x', fill: true, alpha: 0.12, n: 2000 }] });
+
+  function genStep() {
+    const mode = pick(['u', 'u', 'du', 'r', 'r', 'dr']);
+    if (mode === 'u' || mode === 'du') {
+      // Parçalı sabit sinyal
+      const nSeg = pick([1, 2, 2, 3]);
+      const ts = [ri(-2, 1)];
+      for (let i = 0; i < nSeg; i++) ts.push(ts[i] + ri(1, 2));
+      const L = [];
+      for (let i = 0; i < nSeg; i++) { let v; do v = pick([-2, -1, 1, 2, 3]); while (i && v === L[i - 1]); L.push(v); }
+      const jumps = ts.map((t0, i) => ({ c: (i < nSeg ? L[i] : 0) - (i ? L[i - 1] : 0), t0 }));
+      const f = evalTerms(jumps, uf);
+      const fig = figSpec(f, [ts[0] - 1.5, ts[nSeg] + 1.5], [Math.min(0, ...L) - 0.6, Math.max(0, ...L) + 0.6], 'x(t)');
+      const fnm = mode === 'u' ? 'u' : '\\delta';
+      const wrongLevels = ts.map((t0, i) => ({ c: i < nSeg ? L[i] : -L[nSeg - 1], t0 }));
+      const dis = [combTex(wrongLevels, fnm), combTex(jumps.map((x) => ({ c: x.c, t0: -x.t0 })), fnm), combTex(jumps.slice(0, -1), fnm),
+        combTex(jumps.map((x, i) => ({ c: i === nSeg ? -x.c : x.c, t0: x.t0 })), fnm), combTex(jumps.map((x) => ({ c: -x.c, t0: x.t0 })), fnm)];
+      if (mode === 'du') dis.unshift(combTex(jumps, 'u'));
+      const correct = combTex(jumps, fnm);
+      const lhs = mode === 'u' ? 'x(t) = ' : '\\frac{dx}{dt} = ';
+      const o = mkOpts(m(lhs + correct), dis.filter((d) => d !== correct).map((d) => m(lhs + d)));
+      const jumpTxt = jumps.map((x) => m('t = ' + x.t0) + ' (' + m((x.c > 0 ? '+' : '') + x.c) + ')').join(', ');
+      let why = 'Sıçramaları soldan sağa oku (yeni seviye − eski seviye): ' + jumpTxt + '. Her sıçrama, o miktarda bir basamaktır: ' + m('x(t) = ' + combTex(jumps, 'u')) + '. ';
+      if (mode === 'du') why += 'Türevde her ' + m('u(t-t_0)') + ' bir ' + m('\\delta(t-t_0)') + ' olur, katsayı aynı kalır. ';
+      why += 'Kontrol: katsayıların toplamı ' + m(String(jumps.reduce((s, x) => s + x.c, 0))) + ', çünkü sinyal 0’dan başlayıp 0’a dönüyor. Sık hata: katsayıya sıçrama yerine <em>seviyeyi</em> yazmak.';
+      return { stem: 'Şekildeki sinyal veriliyor.', fig, parts: [{ skill: 'step', q: mode === 'u' ? 'Sinyalin birim basamaklarla ifadesi hangisidir?' : m('\\dfrac{dx}{dt}') + ' nedir?', opts: o.opts, a: o.a, why }], _f: f, _terms: jumps, _mode: mode };
+    }
+    // Üçgen / yamuk: eğim k, kenar süresi tau, düz kısım w
+    const k = pick([1, 1, 2, -1]), tau = pick([1, 1, 2]), w = pick([0, 0, 1, 2]), a = ri(-3, 0);
+    const A = k * tau;
+    const slopes = merge([{ c: k, t0: a }, { c: -k, t0: a + tau }, { c: -k, t0: a + tau + w }, { c: k, t0: a + 2 * tau + w }]);
+    const f = evalTerms(slopes, rf);
+    const end = a + 2 * tau + w;
+    const fig = figSpec(f, [a - 1.5, end + 1.5], [Math.min(0, A) - 0.6, Math.max(0, A) + 0.6], 'x(t)');
+    const fnm = mode === 'r' ? 'r' : 'u';
+    const correct = combTex(slopes, fnm);
+    const dis = [
+      combTex(slopes.map((x) => ({ c: Math.abs(x.c) === 2 * Math.abs(k) ? x.c / 2 : x.c, t0: x.t0 })), fnm), // tepede -2k yerine -k
+      combTex(slopes.map((x) => ({ c: x.c / Math.abs(k) * Math.abs(A), t0: x.t0 })), fnm), // eğim yerine yükseklik
+      combTex(slopes.map((x) => ({ c: x.c, t0: -x.t0 })), fnm), // öteleme işareti
+      combTex(slopes, mode === 'r' ? 'u' : '\\delta'),
+      combTex(slopes.map((x, i) => ({ c: i % 2 ? -x.c : x.c, t0: x.t0 })), fnm),
+      combTex(slopes.slice(0, -1), fnm)];
+    if (mode === 'dr') dis.unshift(combTex(slopes, 'r'));
+    const lhs = mode === 'r' ? 'x(t) = ' : '\\frac{dx}{dt} = ';
+    const o = mkOpts(m(lhs + correct), dis.filter((d) => d !== correct).map((d) => m(lhs + d)));
+    const shape = w === 0 ? 'üçgen' : 'yamuk';
+    let why = 'Bu bir ' + shape + ': yükseklik ' + m(String(A)) + ', kenar süresi ' + m(String(tau)) + ', yani eğim ' + m('\\frac{' + A + '}{' + tau + '} = ' + k) + '. Eğimin değiştiği noktalar: ' +
+      slopes.map((x) => m('t = ' + x.t0) + ' (' + m((x.c > 0 ? '+' : '') + x.c) + ')').join(', ') + '. Her eğim değişimi o katsayıda bir rampadır: ' + m('x(t) = ' + combTex(slopes, 'r')) + '. ';
+    if (w === 0) why += 'Tepede eğim ' + m(k + '\\to' + -k) + ' değiştiği için orta katsayı ' + m(String(-2 * k)) + '’dir. ';
+    if (mode === 'dr') why += 'Türevde her rampa basamağa döner (' + m('dr/dt = u') + '), katsayılar aynı kalır. ';
+    why += 'Sık hata: katsayıya eğim yerine yüksekliği yazmak.';
+    return { stem: 'Şekildeki sinyal veriliyor.', fig, parts: [{ skill: 'step', q: mode === 'r' ? 'Sinyalin birim rampalarla ifadesi hangisidir?' : m('\\dfrac{dx}{dt}') + ' birim basamaklarla nedir?', opts: o.opts, a: o.a, why }], _f: f, _terms: slopes, _mode: mode };
+  }
+
   /* ================= Sistemler ================= */
   const Y = true, N = false;
   // Ek sistem havuzu (nottaki 23 sisteme ek). d: 1 = ayrık.
@@ -328,6 +406,7 @@
     { id: 'ep', name: 'Enerji mi, güç mü?', lesson: '1.3', gen: genEP },
     { id: 'eo', name: 'Çift mi, tek mi?', lesson: '1.4', gen: genEO },
     { id: 'delta', name: 'δ’lı integral', lesson: '1.5', gen: genDelta },
+    { id: 'step', name: 'Grafiği u / r ile yazma', lesson: '1.5', gen: genStep },
     { id: 'tf', name: 'x(ct+d) aralığı', lesson: '1.7', gen: genTF },
     { id: 'lin', name: 'Lineer mi?', lesson: '1.8', gen: () => genSys('lin') },
     { id: 'caus', name: 'Nedensel mi?', lesson: '1.9', gen: () => genSys('caus') },

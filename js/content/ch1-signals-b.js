@@ -20,7 +20,7 @@
     id: '1.5', chap: 's', title: 'Temel sürekli sinyaller', pages: 's. 28–40',
     sub: 'u(t), δ(t), r(t), Π, Λ, üstel ve sinüs',
     lead: 'Karmaşık sinyaller birkaç temel parçadan kurulur. Bu dersteki parçalar dersin geri kalanında her yerde karşına çıkacak, özellikle $\\delta(t)$.',
-    goals: ['$u$, $\\delta$, $r$ arasındaki türev zinciri', 'Elek (sifting) özelliğiyle integral almak', '$\\Pi$ ve $\\Lambda$’yı kaydırıp ölçeklemek', 'Darbeyi basamaklarla yazmak'],
+    goals: ['$u$, $\\delta$, $r$ arasındaki türev zinciri', 'Elek (sifting) özelliğiyle integral almak', '$\\Pi$ ve $\\Lambda$’yı kaydırıp ölçeklemek', 'Darbeyi basamaklarla, üçgeni rampalarla yazmak'],
     blocks: [
       { t: 'h', h: 'Birim basamak u(t)', src: 's. 28' },
       { t: 'def', h: T`$$u(t) = \begin{cases} 1 & t > 0 \\ 0 & t < 0 \end{cases}$$ Bir sinyali $u(t)$ ile çarpmak, onu $t=0$’da <strong>açan bir anahtar</strong> gibidir: $\;x(t)u(t) = x(t)$ ($t>0$), $0$ ($t<0$).` },
@@ -69,6 +69,45 @@ $\Pi(t/\tau)$’nun genişliği $\tau$’dur. $\Lambda(t/\tau)$’nun tabanı is
         steps: [T`$i(t) = 10u(t) - 20u(t-2) + 10u(t-4)$`, T`$\int u = r$ olduğundan: $q(t) = \int_{-\infty}^{t} i\,d\tau = 10r(t) - 20r(t-2) + 10r(t-4)$`,
           { h: T`Sonuç bir üçgen: $0$’dan $t=2$’de $20$’ye çıkar, $t=4$’te $0$’a iner.`, fig: spec([-1, 6], [-2, 23], [fn((t) => 10 * Math.max(0, t) - 20 * Math.max(0, t - 2) + 10 * Math.max(0, t - 4), 'y')], { xStep: 1, yStep: 5 }) }],
         ans: T`$i = 10u(t) - 20u(t-2) + 10u(t-4)$, integrali $20\,\Lambda\!\left(\frac{t-2}{2}\right)$. Laboratuvarın “Basamaklarla inşa” sekmesinde hazır olarak var.` },
+
+      { t: 'h', h: 'Üçgen darbe ve δ, u, r, Π, Λ ilişkileri' },
+      { t: 'p', h: T`Basamak kuralının bir üst katı: <strong>eğimli</strong> kenarları olan bir sinyal (üçgen, yamuk) rampalarla yazılır. Basamakta “sıçrama miktarı kadar basamak” ekliyorduk. Burada <strong>eğimin değiştiği her noktaya, eğim değişimi kadar rampa</strong> eklenir. Türev alınca rampalar basamağa, bir türev daha alınca impulslara dönüşür.` },
+      { t: 'def', title: 'Üçgeni rampalarla yazmak', h: T`$$\Lambda\!\left(\frac{t}{\tau}\right) = \frac{1}{\tau}\Big[r(t+\tau) - 2r(t) + r(t-\tau)\Big]$$
+Eğim $t=-\tau$’da $0 \to +\frac1\tau$ (değişim $+\frac1\tau$), tepede $+\frac1\tau \to -\frac1\tau$ (değişim $-\frac2\tau$), $t=\tau$’da $-\frac1\tau \to 0$ (değişim $+\frac1\tau$). Katsayılar <strong>$1, -2, 1$</strong> ve toplamları 0’dır, çünkü sinyal sonunda düz (eğim 0) kalır.
+$$\frac{d}{dt}\Lambda\!\left(\frac{t}{\tau}\right) = \frac{1}{\tau}\Big[u(t+\tau) - 2u(t) + u(t-\tau)\Big]$$
+$$\frac{d^2}{dt^2}\Lambda\!\left(\frac{t}{\tau}\right) = \frac{1}{\tau}\Big[\delta(t+\tau) - 2\delta(t) + \delta(t-\tau)\Big]$$
+Yani üçgenin türevi <strong>iki dikdörtgendir</strong> (biri $+\frac1\tau$, biri $-\frac1\tau$ yüksekliğinde), dikdörtgenlerin türevi de impulslardır.` },
+      { t: 'fig', fig: [spec([-2.5, 2.5], [-0.3, 1.3], [fn((t) => tri(t), 'x')], { title: 'Λ(t) = r(t+1) − 2r(t) + r(t−1)', xStep: 1 }),
+        spec([-2.5, 2.5], [-1.4, 1.4], [fn((t) => (t > -1 && t < 0 ? 1 : t > 0 && t < 1 ? -1 : 0), 'h')], { title: 'Λ′(t) = u(t+1) − 2u(t) + u(t−1)', xStep: 1 }),
+        spec([-2.5, 2.5], [-2.6, 1.6], [{ kind: 'impulse', at: -1, amp: 1, color: 'y', label: '1' }, { kind: 'impulse', at: 0, amp: -2, color: 'y', label: '−2' }, { kind: 'impulse', at: 1, amp: 1, color: 'y', label: '1' }], { title: 'Λ″(t)', xStep: 1 })],
+        cap: 'Soldan sağa her adım bir türev: rampalar basamağa, basamaklar impulsa dönüşür. Ters yönde her adım bir integraldir.' },
+      { t: 'trap', h: T`$A\,\Lambda\!\left(\frac{t-c}{\tau}\right)$’yı rampalarla yazarken öndeki katsayı <strong>yükseklik $A$ değil, eğim $\frac{A}{\tau}$</strong>’dur: $\;\frac{A}{\tau}\big[r(t-c+\tau) - 2r(t-c) + r(t-c-\tau)\big]$. Ortadaki rampanın katsayısı da $-1$ değil, $-2$’dir: tepede eğim $+\frac A\tau$’dan $-\frac A\tau$’ya, yani $2\frac A\tau$ kadar düşer.` },
+      { t: 'table', head: ['İlişki', 'Formül', 'Ne demek?'], rows: [
+        ['δ → u', T`$u(t) = \int_{-\infty}^{t}\delta(\tau)\,d\tau$`, 'İmpulsun integrali basamaktır: $t=0$’ı geçince alan 1 olur ve öyle kalır.'],
+        ['u → r', T`$r(t) = \int_{-\infty}^{t}u(\tau)\,d\tau = t\,u(t)$`, 'Basamağın integrali rampadır: 1 yüksekliğinde biriken alan.'],
+        ['r → u → δ', T`$\frac{dr}{dt} = u, \quad \frac{du}{dt} = \delta$`, 'Rampanın eğimi 1 → basamak. Basamağın $t=0$’daki 1’lik sıçraması → impuls.'],
+        ['Π ↔ u', T`$\Pi\!\left(\frac t\tau\right) = u\!\left(t+\frac\tau2\right) - u\!\left(t-\frac\tau2\right)$`, 'Dikdörtgen = açan basamak − kapatan basamak.'],
+        ['Π′ ↔ δ', T`$\frac{d}{dt}\Pi\!\left(\frac t\tau\right) = \delta\!\left(t+\frac\tau2\right) - \delta\!\left(t-\frac\tau2\right)$`, T`Yukarı sıçrama $+\delta$, aşağı sıçrama $-\delta$.`],
+        ['Λ ↔ r', T`$\Lambda\!\left(\frac t\tau\right) = \frac1\tau\big[r(t+\tau) - 2r(t) + r(t-\tau)\big]$`, 'Üçgen = üç rampa, katsayılar $1, -2, 1$ (eğim çarpanıyla).'],
+        ['Λ′ ↔ Π', T`$\frac{d}{dt}\Lambda\!\left(\frac t\tau\right) = \frac1\tau\left[\Pi\!\left(\frac{t+\tau/2}{\tau}\right) - \Pi\!\left(\frac{t-\tau/2}{\tau}\right)\right]$`, 'Üçgenin türevi iki zıt işaretli dikdörtgen.'],
+        ['Simetri', T`$\delta(-t) = \delta(t), \;\; \Pi(-t) = \Pi(t), \;\; \Lambda(-t) = \Lambda(t)$`, '$\\delta$, $\\Pi$, $\\Lambda$ <strong>çift</strong>tir. $u$ ve $r$ ne çift ne tektir.']] },
+      { t: 'example', src: 's. 39–40', title: 'Üçgeni rampalarla yaz, iki kez türev al', q: T`$y(t) = 2\,\Lambda\!\left(\frac{t-3}{2}\right)$ sinyalini birim rampalarla yaz. $y'(t)$ ve $y''(t)$’yi bul ve çiz.`,
+        steps: [T`Önceki örnekten: $1<t<5$ aralığında, tepe $t=3$’te 2. Eğim: $\frac{A}{\tau} = \frac22 = 1$.`,
+          T`Eğim değişimleri: $t=1$’de $0 \to 1$ ($+1$), $t=3$’te $1 \to -1$ ($-2$), $t=5$’te $-1 \to 0$ ($+1$).`,
+          T`$y(t) = r(t-1) - 2r(t-3) + r(t-5)$. Kontrol: $t=3$’te $r(2) = 2$ ✓, $t=6$’da $5 - 6 + 1 = 0$ ✓.`,
+          { h: T`Türevler: $y' = u(t-1) - 2u(t-3) + u(t-5)$ (önce $+1$, sonra $-1$ yüksekliğinde iki dikdörtgen). $\;y'' = \delta(t-1) - 2\delta(t-3) + \delta(t-5)$.`,
+            fig: [spec([0, 6.5], [-1.4, 1.4], [fn((t) => (t > 1 && t < 3 ? 1 : t > 3 && t < 5 ? -1 : 0), 'h')], { title: "y′(t)", xStep: 1 }),
+              spec([0, 6.5], [-2.6, 1.6], [{ kind: 'impulse', at: 1, amp: 1, color: 'y', label: '1' }, { kind: 'impulse', at: 3, amp: -2, color: 'y', label: '−2' }, { kind: 'impulse', at: 5, amp: 1, color: 'y', label: '1' }], { title: "y″(t)", xStep: 1 })] }],
+        ans: T`$y = r(t-1) - 2r(t-3) + r(t-5)$, $\;y' = u(t-1) - 2u(t-3) + u(t-5) = \Pi\!\left(\frac{t-2}{2}\right) - \Pi\!\left(\frac{t-4}{2}\right)$, $\;y'' = \delta(t-1) - 2\delta(t-3) + \delta(t-5)$` },
+      { t: 'hw', title: 'Yamuk (trapez)', q: T`$x(t)$: $t<0$’da 0; $0<t<1$’de 0’dan 2’ye doğrusal çıkıyor; $1<t<3$’te 2; $3<t<4$’te 2’den 0’a doğrusal iniyor; $t>4$’te 0. $x(t)$’yi birim rampalarla yaz ve türevini birim basamaklarla ifade et.`, hint: T`Eğimler sırasıyla $0, 2, 0, -2, 0$. Her değişim noktasına değişim kadar rampa koy.`,
+        steps: [T`Eğim değişimleri: $t=0$’da $+2$, $t=1$’de $-2$, $t=3$’te $-2$, $t=4$’te $+2$.`, T`$x(t) = 2r(t) - 2r(t-1) - 2r(t-3) + 2r(t-4)$`,
+          { h: T`$x'(t) = 2u(t) - 2u(t-1) - 2u(t-3) + 2u(t-4) = 2\big[u(t) - u(t-1)\big] - 2\big[u(t-3) - u(t-4)\big]$`, fig: [spec([-1, 5], [-0.4, 2.6], [fn((t) => 2 * Math.max(0, t) - 2 * Math.max(0, t - 1) - 2 * Math.max(0, t - 3) + 2 * Math.max(0, t - 4), 'x')], { title: 'x(t)', xStep: 1 }), spec([-1, 5], [-2.6, 2.6], [fn((t) => (t > 0 && t < 1 ? 2 : t > 3 && t < 4 ? -2 : 0), 'h')], { title: "x′(t)", xStep: 1 })] }],
+        ans: T`$x = 2r(t) - 2r(t-1) - 2r(t-3) + 2r(t-4)$, $\;x' = 2[u(t) - u(t-1)] - 2[u(t-3) - u(t-4)]$. Kontrol: rampa katsayılarının toplamı $0$ (sinyal sonunda düz) ✓.` },
+      { t: 'quiz', items: [
+        { q: T`$\frac{d}{dt}\,r(t-2)$ nedir?`, opts: ['$\\delta(t-2)$', '$u(t-2)$', '$(t-2)\\,u(t-2)$'], a: 1, why: T`Rampanın türevi basamaktır, öteleme aynen korunur.` },
+        { q: T`$r(t) - 2r(t-1) + r(t-2)$ hangi sinyaldir?`, opts: ['$\\Lambda(t-1)$', '$\\Pi(t-1)$', '$2\\Lambda(t-1)$'], a: 0, why: T`Eğim 1 ile çıkar, $t=1$’de $-1$’e döner, $t=2$’de düzleşir: tabanı $0<t<2$, tepesi $t=1$’de 1 olan üçgen, yani $\Lambda(t-1)$.` },
+        { q: T`$3\,\Lambda\!\left(\frac{t}{3}\right)$’nın rampa ifadesindeki ilk katsayı kaçtır?`, opts: ['3', '1', '$\\frac13$'], a: 1, why: T`Katsayı eğimdir: $\frac{A}{\tau} = \frac33 = 1$. Sonuç: $r(t+3) - 2r(t) + r(t-3)$.` },
+        { q: T`$\int_{-\infty}^{t}\big[\delta(\tau+1) - \delta(\tau-1)\big]d\tau$ nedir?`, opts: ['$\\Pi(t/2)$', '$\\Lambda(t)$', '$r(t+1) - r(t-1)$'], a: 0, why: T`$\int\delta(\tau+1) = u(t+1)$, $\int\delta(\tau-1) = u(t-1)$. Fark $u(t+1) - u(t-1) = \Pi(t/2)$: genişlik 2, merkez 0.` }] },
 
       { t: 'h', h: 'Üstel ve sinüzoidal sinyaller', src: 's. 34–35' },
       { t: 'def', h: T`$x(t) = Ae^{at}$: $a>0$ büyür, $a<0$ söner, $x(0) = A$.<br>$x(t) = \sin\omega t,\; \cos\omega t$ ve karmaşık üstel $\;x(t) = e^{j\omega t} = \cos\omega t + j\sin\omega t$ (Euler).` },

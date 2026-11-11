@@ -548,6 +548,7 @@
         el('div', { class: 'bar train-bar' }, el('span', { style: { width: (100 * session.i) / session.groups.length + '%' } })));
       const body = el('div', { class: 'card-body' });
       if (g.stem) body.append(el('div', { class: 'card-q', html: R(g.stem) }));
+      if (g.fig) body.append(figs(g.fig));
       let left = g.parts.length;
       const next = SS.ui.button(session.i + 1 < session.groups.length ? 'Sonraki soru →' : 'Sonuçları gör', () => { session.i++; session.i < session.groups.length ? showGroup() : summary(); }, 'btn-primary');
       next.style.display = 'none';

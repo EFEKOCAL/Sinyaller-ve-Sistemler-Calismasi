@@ -23,7 +23,9 @@
     { title: 'Temel sinyaller', lesson: '1.5', items: [
       T`$$\int\phi(t)\,\delta(t-a)\,dt = \phi(a) \qquad \delta(at) = \frac{\delta(t)}{|a|} \qquad x(t)\delta(t-\tau) = x(\tau)\delta(t-\tau)$$`,
       T`$$\delta = \frac{du}{dt}, \quad u = \frac{dr}{dt}, \quad \Pi\!\left(\frac{t}{\tau}\right) = u\!\left(t+\frac{\tau}{2}\right) - u\!\left(t-\frac{\tau}{2}\right)$$`,
-      T`$\Pi(t/\tau)$: genişlik $\tau$. $\;\Lambda(t/\tau)$: taban $2\tau$, tepe 1.`] },
+      T`$\Pi(t/\tau)$: genişlik $\tau$. $\;\Lambda(t/\tau)$: taban $2\tau$, tepe 1.`,
+      T`$$\Lambda\!\left(\frac{t}{\tau}\right) = \frac1\tau\big[r(t+\tau) - 2r(t) + r(t-\tau)\big] \qquad \frac{d}{dt}\Lambda\!\left(\frac{t}{\tau}\right) = \frac1\tau\big[u(t+\tau) - 2u(t) + u(t-\tau)\big]$$`,
+      T`Sıçrama → basamak (katsayı = sıçrama miktarı). Eğim değişimi → rampa (katsayı = eğim farkı). $\delta$, $\Pi$, $\Lambda$ çifttir.`] },
     { title: 'Ayrık temel diziler', lesson: '1.6', items: [
       T`$$\delta[n] = u[n]-u[n-1] \qquad u[n] = \sum_{k=-\infty}^{n}\delta[k] \qquad x[n] = \sum_k x[k]\delta[n-k]$$`] },
     { title: 'Sinyal işlemleri', lesson: '1.7', items: [
