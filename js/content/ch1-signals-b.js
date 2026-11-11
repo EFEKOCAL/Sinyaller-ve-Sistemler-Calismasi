@@ -40,14 +40,15 @@ $$\text{Elek özelliği:}\quad \int_{-\infty}^{\infty}\phi(t)\,\delta(t-a)\,dt =
 $$\delta(at) = \frac{1}{|a|}\delta(t), \qquad \delta(-t) = \delta(t), \qquad x(t)\delta(t) = x(0)\delta(t), \qquad x(t)\delta(t-\tau) = x(\tau)\delta(t-\tau)$$` },
       { t: 'idea', title: 'Bu özellikler neden doğru?', h: T`<strong>Elek:</strong> $\delta(t-a)$, $t=a$ dışında sıfır olduğu için çarpımda $\phi(t)$’nin yalnızca $\phi(a)$ değeri kalır: $\phi(t)\delta(t-a) = \phi(a)\delta(t-a)$. Sabit $\phi(a)$ integralin dışına çıkar, geriye $\int\delta = 1$ kalır.<br><strong>$\delta(at) = \frac{1}{|a|}\delta(t)$:</strong> $\delta(2t)$’yi, yüksekliği aynı ama genişliği yarıya inmiş bir darbe gibi düşün. Alanı da yarıya iner: $\frac12$. Bu yüzden $\int\phi(t)\delta(2t-4)dt$ sorusunda önce $\delta(2(t-2)) = \frac12\delta(t-2)$ yazılır, sonuç $\frac12\phi(2)$ olur.<br><strong>$\delta(-t) = \delta(t)$:</strong> impuls çift bir sinyaldir. Bu, $|a|$’daki mutlak değerin sebebidir.` },
       { t: 'trap', h: T`İki şeyi karıştırma: $x(t)\,\delta(t-\tau) = x(\tau)\,\delta(t-\tau)$ bir <strong>sinyaldir</strong> (yüksekliği $x(\tau)$ olan bir impuls). $\int x(t)\,\delta(t-\tau)\,dt = x(\tau)$ ise bir <strong>sayıdır</strong>. Bir de integral sınırları: impuls aralığın dışındaysa sonuç 0’dır.` },
-      { t: 'def', title: 'Rampa ve türev zinciri (s. 30)', h: T`$$r(t) = \begin{cases} t & t \ge 0 \\ 0 & t < 0\end{cases} = t\,u(t) \qquad\qquad \delta(t) = \frac{du(t)}{dt}, \qquad u(t) = \frac{dr(t)}{dt}$$ Zincir: $r$ —türev→ $u$ —türev→ $\delta$, ve tersine $\delta$ —integral→ $u$ —integral→ $r$.` },
+
+      { t: 'h', h: 'Birim rampa r(t)', src: 's. 30' },
+      { t: 'def', title: 'Tanım (s. 30)', h: T`$$r(t) = \begin{cases} 0 & t < 0 \\ t & t \ge 0\end{cases} = t\,u(t)$$
+Rampa $t<0$’da 0’dır, $t=0$’dan sonra <strong>eğimi 1</strong> olan bir doğru gibi yükselir ($r(1) = 1$, $r(2) = 2$, …). $t\,u(t)$ yazımı da bunu söyler: $t$ doğrusunun sadece sağ tarafı kalır.
+<strong>Türev ilişkileri:</strong>
+$$\delta(t) = \frac{du(t)}{dt}, \qquad u(t) = \frac{dr(t)}{dt}$$
+Zincir: $r$ —türev→ $u$ —türev→ $\delta$, ve tersine $\delta$ —integral→ $u$ —integral→ $r$.` },
       { t: 'fig', fig: [spec([-2, 3], [-0.3, 2.4], [fn((t) => (t > 0 ? t : 0), 'x')], { title: 'r(t)' }), spec([-2, 3], [-0.3, 1.4], [fn(u, 'h')], { title: 'u(t) = dr/dt' }), spec([-2, 3], [-0.3, 1.4], [{ kind: 'impulse', at: 0, amp: 1, color: 'y', label: '1' }], { title: 'δ(t) = du/dt' })] },
       { t: 'lab', id: 'basics' },
-      { t: 'example', src: 's. 36', q: T`(a) $\displaystyle\int_{-\infty}^{\infty}\sin 3t\;\delta\!\left(t-\frac{\pi}{2}\right)dt$ &nbsp;&nbsp; (b) $\displaystyle\int_{-\infty}^{\infty}t^4\,\delta(t-2)\,dt$`,
-        steps: [T`Elek özelliği: $\delta(t-a)$ integrali $t = a$’daki değeri seçer.`, T`(a) $a = \frac{\pi}{2}$: $\;\sin\left(3\cdot\frac{\pi}{2}\right) = \sin\frac{3\pi}{2} = -1$`, T`(b) $a = 2$: $\;2^4 = 16$`],
-        ans: T`(a) $-1$ &nbsp; (b) $16$` },
-      { t: 'hw', src: 's. 36', q: T`(a) $\displaystyle\int_{-\infty}^{\infty}\sin\!\left(t^3 + \frac{\pi}{2}\right)\delta(t)\,dt$ &nbsp;&nbsp; (b) $\displaystyle\int_{0}^{10}(t^2 + 4t - 2)\,\delta(t-1)\,dt$`, hint: T`(b)’de önce impulsun ($t=1$) integral aralığının ($0$ ile $10$) içinde olup olmadığını kontrol et.`,
-        steps: [T`(a) $t = 0$: $\sin(0 + \frac{\pi}{2}) = 1$`, T`(b) $t=1$, $[0, 10]$ aralığının içinde. $1 + 4 - 2 = 3$`], ans: T`(a) $1$ &nbsp; (b) $3$. Laboratuvarın “Elek özelliği” sekmesinde ikisini de deneyebilirsin.` },
 
       { t: 'h', h: 'Dikdörtgen Π ve üçgen Λ darbeleri', src: 's. 31–33' },
       { t: 'def', h: T`$$\Pi\!\left(\frac{t}{\tau}\right) = \begin{cases} 1 & |t| < \tau/2 \\ 0 & \text{diğer}\end{cases} = u\!\left(t + \frac{\tau}{2}\right) - u\!\left(t - \frac{\tau}{2}\right) \qquad \Lambda\!\left(\frac{t}{\tau}\right) = \begin{cases} 1 - \frac{|t|}{\tau} & |t| < \tau \\ 0 & \text{diğer}\end{cases}$$
@@ -57,25 +58,40 @@ $\Pi(t/\tau)$’nun genişliği $\tau$’dur. $\Lambda(t/\tau)$’nun tabanı is
         T`İçerideki ifadeyi eşitsizliğe koy: Π için $-\frac12 < \frac{t-c}{\tau} < \frac12$, Λ için $-1 < \frac{t-c}{\tau} < 1$.`,
         T`$t$ için çöz: Π → $c - \frac{\tau}{2} < t < c + \frac{\tau}{2}$; Λ → $c - \tau < t < c + \tau$, tepe $t = c$’de.`,
         T`Öndeki katsayı yüksekliktir.`] },
-      { t: 'example', src: 's. 39–40', q: T`(a) $x(t) = 3\,\Pi\!\left(\frac{t-4}{2}\right)$ &nbsp; (b) $y(t) = 2\,\Lambda\!\left(\frac{t-3}{2}\right)$ sinyallerini çiz.`,
+
+      { t: 'h', h: 'Üstel ve sinüzoidal sinyaller', src: 's. 34–35' },
+      { t: 'def', h: T`$x(t) = Ae^{at}$: $a>0$ büyür, $a<0$ söner, $x(0) = A$.<br>$x(t) = \sin\omega t,\; \cos\omega t$ ve karmaşık üstel $\;x(t) = e^{j\omega t} = \cos\omega t + j\sin\omega t$ (Euler).` },
+      { t: 'p', h: T`$e^{j\omega t}$ karmaşık düzlemde birim çember üzerinde dönen bir noktadır. Gerçel kısmı kosinüs, sanal kısmı sinüs çizer. Laboratuvarın son sekmesinde dönüşü izleyebilirsin.` },
+
+      { t: 'h', h: 'İmpulslu integraller (elek özelliği)', src: 's. 36' },
+      { t: 'example', src: 's. 36', q: T`Aşağıdaki ifadeleri hesaplayınız:<br>(a) $\displaystyle\int_{-\infty}^{\infty}\sin 3t\;\delta\!\left(t-\frac{\pi}{2}\right)dt$ &nbsp;&nbsp; (b) $\displaystyle\int_{-\infty}^{\infty}t^4\,\delta(t-2)\,dt$`,
+        steps: [T`Elek özelliği: $\delta(t-a)$ integrali $t = a$’daki değeri seçer.`, T`(a) $a = \frac{\pi}{2}$: $\;\sin\left(3\cdot\frac{\pi}{2}\right) = \sin\frac{3\pi}{2} = -1$`, T`(b) $a = 2$: $\;2^4 = 16$`],
+        ans: T`(a) $-1$ &nbsp; (b) $16$` },
+      { t: 'hw', src: 's. 36', q: T`Aşağıdaki ifadeleri hesaplayınız:<br>(a) $\displaystyle\int_{-\infty}^{\infty}\sin\!\left(t^3 + \frac{\pi}{2}\right)\delta(t)\,dt$ &nbsp;&nbsp; (b) $\displaystyle\int_{0}^{10}(t^2 + 4t - 2)\,\delta(t-1)\,dt$`, hint: T`(b)’de önce impulsun ($t=1$) integral aralığının ($0$ ile $10$) içinde olup olmadığını kontrol et.`,
+        steps: [T`(a) $t = 0$: $\sin(0 + \frac{\pi}{2}) = 1$`, T`(b) $t=1$, $[0, 10]$ aralığının içinde. $1 + 4 - 2 = 3$`], ans: T`(a) $1$ &nbsp; (b) $3$. Laboratuvarın “Elek özelliği” sekmesinde ikisini de deneyebilirsin.` },
+
+      { t: 'h', h: 'Sinyali basamaklarla yazmak', src: 's. 37–38' },
+      { t: 'p', h: T`Parçalı sabit bir sinyal, her sıçrama noktasında <em>sıçrama miktarı kadar</em> bir basamak eklenerek yazılır. Türev alınca her basamak bir impulsa dönüşür. Bu yüzden türev, sıçrama noktalarındaki impulslardan oluşur.` },
+      { t: 'example', src: 's. 37–38', q: T`Şekildeki $v(t)$ darbesini ($2<t<5$ aralığında 10, diğer yerlerde 0) birim basamak fonksiyonları ile yazıp türevini alarak şeklini çiziniz.`,
+        fig: spec([0, 6.5], [-1, 12], [fn((t) => (t > 2 && t < 5 ? 10 : 0), 'x')], { title: 'v(t)', xStep: 1, yStep: 5 }),
+        steps: [T`$t=2$’de $+10$ sıçrama: $10u(t-2)$. $t=5$’te $-10$ sıçrama: $-10u(t-5)$.`, T`$v(t) = 10u(t-2) - 10u(t-5) = 10[u(t-2) - u(t-5)]$`,
+          { h: T`$\frac{dv}{dt} = 10[\delta(t-2) - \delta(t-5)]$`, fig: spec([0, 6.5], [-12, 12], [{ kind: 'impulse', at: 2, amp: 10, color: 'h', label: '10δ(t−2)' }, { kind: 'impulse', at: 5, amp: -10, color: 'h', label: '−10δ(t−5)' }], { xStep: 1, yStep: 5 }) }],
+        ans: T`$v(t) = 10[u(t-2) - u(t-5)]$, $\;v'(t) = 10\delta(t-2) - 10\delta(t-5)$` },
+      { t: 'hw', src: 's. 38', q: T`Şekildeki $i(t)$ fonksiyonunu ($0<t<2$ aralığında 10, $2<t<4$ aralığında $-10$, diğer yerlerde 0) birim basamak fonksiyonları ile yazıp integralini alarak şeklini çiziniz.`,
+        fig: spec([-1, 5.5], [-12, 12], [fn((t) => (t > 0 && t < 2 ? 10 : t > 2 && t < 4 ? -10 : 0), 'x')], { title: 'i(t)', xStep: 1, yStep: 5 }), hint: T`Sıçramalar: $t=0$’da $+10$, $t=2$’de $-20$ (10’dan $-10$’a), $t=4$’te $+10$.`,
+        steps: [T`$i(t) = 10u(t) - 20u(t-2) + 10u(t-4)$`, T`$\int u = r$ olduğundan: $q(t) = \int_{-\infty}^{t} i\,d\tau = 10r(t) - 20r(t-2) + 10r(t-4)$`,
+          { h: T`Sonuç bir üçgen: $0$’dan $t=2$’de $20$’ye çıkar, $t=4$’te $0$’a iner.`, fig: spec([-1, 6], [-2, 23], [fn((t) => 10 * Math.max(0, t) - 20 * Math.max(0, t - 2) + 10 * Math.max(0, t - 4), 'y')], { xStep: 1, yStep: 5 }) }],
+        ans: T`$i = 10u(t) - 20u(t-2) + 10u(t-4)$, integrali $20\,\Lambda\!\left(\frac{t-2}{2}\right)$. Laboratuvarın “Basamaklarla inşa” sekmesinde hazır olarak var.` },
+
+      { t: 'h', h: 'Π ve Λ sinyallerini çizmek', src: 's. 39–40' },
+      { t: 'example', src: 's. 39–40', q: T`Aşağıdaki işaretleri çiziniz:<br>(a) $x(t) = 3\,\Pi\!\left(\frac{t-4}{2}\right)$ &nbsp; (b) $y(t) = 2\,\Lambda\!\left(\frac{t-3}{2}\right)$`,
         steps: [T`(a) $-1 < t - 4 < 1$ → $3 < t < 5$. Yükseklik 3.`,
           { h: T`(b) $-2 < t - 3 < 2$ → $1 < t < 5$, tepe $t=3$’te, yükseklik 2. Parçalı yazım: $y = 2\left(1 + \frac{t-3}{2}\right) = t - 1$ ($1<t<3$), $\;y = 2\left(1 - \frac{t-3}{2}\right) = 5 - t$ ($3<t<5$).`,
             fig: [spec([0, 6.5], [-0.4, 3.6], [fn((t) => (t > 3 && t < 5 ? 3 : 0), 'x')], { title: '3Π((t−4)/2)', xStep: 1 }), spec([0, 6.5], [-0.4, 2.6], [fn((t) => 2 * tri((t - 3) / 2), 'h')], { title: '2Λ((t−3)/2)', xStep: 1 })] }],
         ans: T`$x$: $3<t<5$ aralığında 3. $\;y$: $t-1$ ($1<t<3$), $5-t$ ($3<t<5$).` },
-      { t: 'hw', src: 's. 40', q: T`(a) $x(t) = 5\,\Pi\!\left(\frac{t-2}{4}\right)$ &nbsp; (b) $y(t) = 3\,\Lambda\!\left(\frac{t-2}{3}\right)$ sinyallerini çiz ve parçalı olarak yaz.`,
+      { t: 'hw', src: 's. 40', q: T`Aşağıdaki işaretleri çiziniz (ve parçalı olarak yazınız):<br>(a) $x(t) = 5\,\Pi\!\left(\frac{t-2}{4}\right)$ &nbsp; (b) $y(t) = 3\,\Lambda\!\left(\frac{t-2}{3}\right)$`,
         steps: [T`(a) $-2 < t - 2 < 2$ → $0 < t < 4$, yükseklik 5.`, T`(b) $-3 < t - 2 < 3$ → $-1 < t < 5$, tepe $t=2$’de 3. $\;3\left(1 + \frac{t-2}{3}\right) = t + 1$ ($-1<t<2$), $\;3\left(1 - \frac{t-2}{3}\right) = 5 - t$ ($2<t<5$).`],
         ans: T`$x = 5$ ($0<t<4$). $\;y = t+1$ ($-1<t<2$), $5-t$ ($2<t<5$). Laboratuvarın “Π ve Λ” sekmesinden kontrol et.` },
-
-      { t: 'h', h: 'Sinyali basamaklarla yazmak', src: 's. 37–38' },
-      { t: 'p', h: T`Parçalı sabit bir sinyal, her sıçrama noktasında <em>sıçrama miktarı kadar</em> bir basamak eklenerek yazılır. Türev alınca her basamak bir impulsa dönüşür. Bu yüzden türev, sıçrama noktalarındaki impulslardan oluşur.` },
-      { t: 'example', src: 's. 37–38', q: T`$2<t<5$ aralığında 10 olan $v(t)$ darbesini birim basamaklarla yaz ve türevini çiz.`,
-        steps: [T`$t=2$’de $+10$ sıçrama: $10u(t-2)$. $t=5$’te $-10$ sıçrama: $-10u(t-5)$.`, T`$v(t) = 10u(t-2) - 10u(t-5) = 10[u(t-2) - u(t-5)]$`,
-          { h: T`$\frac{dv}{dt} = 10[\delta(t-2) - \delta(t-5)]$`, fig: spec([0, 6.5], [-12, 12], [{ kind: 'impulse', at: 2, amp: 10, color: 'h', label: '10δ(t−2)' }, { kind: 'impulse', at: 5, amp: -10, color: 'h', label: '−10δ(t−5)' }], { xStep: 1, yStep: 5 }) }],
-        ans: T`$v(t) = 10[u(t-2) - u(t-5)]$, $\;v'(t) = 10\delta(t-2) - 10\delta(t-5)$` },
-      { t: 'hw', src: 's. 38', q: T`$i(t)$: $0<t<2$ aralığında 10, $2<t<4$ aralığında $-10$, diğer yerlerde 0. Birim basamaklarla yaz ve integralini çiz.`, hint: T`Sıçramalar: $t=0$’da $+10$, $t=2$’de $-20$ (10’dan $-10$’a), $t=4$’te $+10$.`,
-        steps: [T`$i(t) = 10u(t) - 20u(t-2) + 10u(t-4)$`, T`$\int u = r$ olduğundan: $q(t) = \int_{-\infty}^{t} i\,d\tau = 10r(t) - 20r(t-2) + 10r(t-4)$`,
-          { h: T`Sonuç bir üçgen: $0$’dan $t=2$’de $20$’ye çıkar, $t=4$’te $0$’a iner.`, fig: spec([-1, 6], [-2, 23], [fn((t) => 10 * Math.max(0, t) - 20 * Math.max(0, t - 2) + 10 * Math.max(0, t - 4), 'y')], { xStep: 1, yStep: 5 }) }],
-        ans: T`$i = 10u(t) - 20u(t-2) + 10u(t-4)$, integrali $20\,\Lambda\!\left(\frac{t-2}{2}\right)$. Laboratuvarın “Basamaklarla inşa” sekmesinde hazır olarak var.` },
 
       { t: 'h', h: 'Üçgen darbe ve δ, u, r, Π, Λ ilişkileri' },
       { t: 'p', h: T`Basamak kuralının bir üst katı: <strong>eğimli</strong> kenarları olan bir sinyal (üçgen, yamuk) rampalarla yazılır. Basamakta “sıçrama miktarı kadar basamak” ekliyorduk. Burada <strong>eğimin değiştiği her noktaya, eğim değişimi kadar rampa</strong> eklenir. Türev alınca rampalar basamağa, bir türev daha alınca impulslara dönüşür.` },
@@ -116,9 +132,6 @@ Yani üçgenin türevi <strong>iki dikdörtgendir</strong> (biri $+\frac1\tau$, 
         { q: T`$3\,\Lambda\!\left(\frac{t}{3}\right)$’nın rampa ifadesindeki ilk katsayı kaçtır?`, opts: ['3', '1', '$\\frac13$'], a: 1, why: T`Katsayı eğimdir: $\frac{A}{\tau} = \frac33 = 1$. Sonuç: $r(t+3) - 2r(t) + r(t-3)$.` },
         { q: T`$\int_{-\infty}^{t}\big[\delta(\tau+1) - \delta(\tau-1)\big]d\tau$ nedir?`, opts: ['$\\Pi(t/2)$', '$\\Lambda(t)$', '$r(t+1) - r(t-1)$'], a: 0, why: T`$\int\delta(\tau+1) = u(t+1)$, $\int\delta(\tau-1) = u(t-1)$. Fark $u(t+1) - u(t-1) = \Pi(t/2)$: genişlik 2, merkez 0.` }] },
 
-      { t: 'h', h: 'Üstel ve sinüzoidal sinyaller', src: 's. 34–35' },
-      { t: 'def', h: T`$x(t) = Ae^{at}$: $a>0$ büyür, $a<0$ söner, $x(0) = A$.<br>$x(t) = \sin\omega t,\; \cos\omega t$ ve karmaşık üstel $\;x(t) = e^{j\omega t} = \cos\omega t + j\sin\omega t$ (Euler).` },
-      { t: 'p', h: T`$e^{j\omega t}$ karmaşık düzlemde birim çember üzerinde dönen bir noktadır. Gerçel kısmı kosinüs, sanal kısmı sinüs çizer. Laboratuvarın son sekmesinde dönüşü izleyebilirsin.` },
       { t: 'quiz', items: [
         { q: T`$\int_{-\infty}^{\infty} e^{-t}\,\delta(t+1)\,dt$ kaçtır?`, opts: ['$e^{-1}$', '$e$', '0'], a: 1, why: T`$\delta(t+1)$, $t=-1$’de yer alır: $e^{-(-1)} = e$.` },
         { q: T`$\delta(2t)$ neye eşittir?`, opts: ['$2\\delta(t)$', '$\\frac12\\delta(t)$', '$\\delta(t)$'], a: 1, why: T`$\delta(at) = \frac{1}{|a|}\delta(t)$. Darbe yarı genişliğe sıkışır, yüksekliği aynı kalırsa alanı da yarıya iner.` },
