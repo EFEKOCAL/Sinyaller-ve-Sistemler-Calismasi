@@ -9,6 +9,7 @@
   const R = SS.renderMath;
 
   const CHAPTERS = [
+    { id: 'pre', title: 'Ders öncesi · Matematik', sub: 'Derste gereken integral becerileri', pages: 'ön bilgi', prep: true },
     { id: 's', title: 'Bölüm 1 · Sinyaller', sub: 'Sinyal türleri, temel sinyaller ve sinyal işlemleri', pages: 's. 2–53', exam: true },
     { id: 'sys', title: 'Bölüm 1 · Sistemler', sub: 'Lineerlik, nedensellik, zamanla değişmezlik, kararlılık', pages: 's. 54–68', exam: true },
     { id: 'lti', title: 'Bölüm 2 · LTI Sistemler', sub: 'İmpuls cevabı, konvolüsyon, fark denklemleri', pages: 's. 69–109', exam: false }
@@ -70,7 +71,7 @@
         href === '#/antrenman' && nDue ? el('span', { class: 'nav-due', title: 'Bugün tekrar edilecek beceri' }, String(nDue)) : el('span')));
     }
     for (const ch of CHAPTERS) {
-      nav.append(el('div', { class: 'nav-group' }, ch.title, ch.exam ? null : el('span', { class: 'badge-out' }, 'vize dışı')));
+      nav.append(el('div', { class: 'nav-group' }, ch.title, ch.exam || ch.prep ? null : el('span', { class: 'badge-out' }, 'vize dışı')));
       for (const l of lessons().filter((x) => x.chap === ch.id)) {
         nav.append(el('a', { class: 'nav-item', href: '#/ders/' + l.id, 'aria-current': route === 'ders/' + l.id ? 'page' : null },
           el('span', { class: 'nav-num' }, l.id),
@@ -265,8 +266,9 @@
     const ch = CHAPTERS.find((c) => c.id === l.chap);
     const page = el('div', { class: 'page' });
     page.append(el('div', { class: 'crumb' },
-      el('span', null, ch ? ch.title : ''), el('span', null, '·'), el('span', { class: 'pill' }, 'Ders notu ' + l.pages),
-      ch && ch.exam ? el('span', { class: 'pill pill-ok' }, 'Vize konusu') : el('span', { class: 'pill pill-out' }, 'Vize dışı')));
+      el('span', null, ch ? ch.title : ''), el('span', null, '·'),
+      ch && ch.prep ? el('span', { class: 'pill pill-ok' }, 'Ön bilgi · ders öncesi') : el('span', { class: 'pill' }, 'Ders notu ' + l.pages),
+      ch && ch.prep ? null : ch && ch.exam ? el('span', { class: 'pill pill-ok' }, 'Vize konusu') : el('span', { class: 'pill pill-out' }, 'Vize dışı')));
     page.append(el('h1', { html: R(l.id + ' ' + l.title) }));
     if (l.lead) page.append(el('p', { class: 'lead', html: R(l.lead) }));
     if (l.goals) page.append(el('ul', { class: 'goals' }, l.goals.map((g) => el('li', { html: R(g) }))));
@@ -321,6 +323,7 @@
     hero.append(el('p', { class: 'lead', html: R('Sinyaller ve Sistemler dersinin ilk iki bölümü: sinyalleri tanımaktan başlayıp konvolüsyon ve fark denklemlerine kadar. Ders notundaki her konu burada <strong>sezgiyle</strong> açıklanır, <strong>etkileşimli grafiklerle</strong> denenir ve notun kendi örnekleriyle <strong>adım adım</strong> çözülür.') }));
     hero.append(heroFigures());
     hero.append(box('box-def', 'Vize kapsamı', '<strong>Bölüm 1’in tamamı</strong> (1.1–1.11): sinyaller ve sistem özellikleri, kararlılık dahil. Bölüm 2 (LTI sistemler) vizeye <strong>dahil değil</strong>, finalde gelecek. Vizeden önceki son gün <a href="#/vize">Vize hazırlık</a> sayfasındaki deneme sorularını çöz.'));
+    hero.append(box('box-idea', 'Ders öncesi öneri: integral tekrarı', 'Enerji, güç, impuls ve konvolüsyon hesaplarının hepsi integrale dayanır. İntegralde zorlanıyorsan derslere başlamadan önce iki kısa sayfaya bak: <a href="#/ders/0.1"><strong>0.1 İntegral tekrarı</strong></a> (temel tablo, sonsuz sınır, $\\cos^2$, simetri, kısmi integrasyon) ve <a href="#/ders/0.2"><strong>0.2 Sinyallerde integral</strong></a> (parçalı sinyaller, $u(t)$ ile sınırlar, $\\int_{-\\infty}^{t}$ tipi integraller). Laboratuvarda integrali alan olarak görebilirsin.'));
     const firstUndone = examLessons().find((l) => !isDone(l.id)) || examLessons()[0];
     const cta = el('div', { class: 'cta-row' });
     if (firstUndone) cta.append(el('a', { class: 'btn btn-primary', href: '#/ders/' + firstUndone.id }, (Object.keys(progress.done).some((k) => progress.done[k]) ? 'Kaldığın yerden devam et: ' : 'Başla: ') + firstUndone.id + ' ' + firstUndone.title));
@@ -351,7 +354,7 @@
 
     for (const ch of CHAPTERS) {
       const sec = el('section', { class: 'chap' });
-      sec.append(el('div', { class: 'chap-head' }, el('h2', null, ch.title), el('span', null, ch.sub + ' · ' + ch.pages), ch.exam ? null : el('span', { class: 'pill pill-out' }, 'Vize dışı · final')));
+      sec.append(el('div', { class: 'chap-head' }, el('h2', null, ch.title), el('span', null, ch.sub + ' · ' + ch.pages), ch.exam ? null : ch.prep ? el('span', { class: 'pill pill-ok' }, 'Ders öncesi') : el('span', { class: 'pill pill-out' }, 'Vize dışı · final')));
       const grid = el('div', { class: 'lessons' });
       for (const l of lessons().filter((x) => x.chap === ch.id)) {
         grid.append(el('a', { class: 'lesson-card' + (isDone(l.id) ? ' done' : ''), href: '#/ders/' + l.id },
