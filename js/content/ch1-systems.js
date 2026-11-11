@@ -19,7 +19,7 @@
     goals: ['Homojenlik ve toplamsallık', 'Lineerliği cebirsel olarak ispatlamak', 'Karşı örnekle lineer olmadığını göstermek', '“Sıfır giriş, sıfır çıkış” testi'],
     blocks: [
       { t: 'idea', h: T`Bir müzik setinin sesini iki katına çıkardığında hoparlörden gelen ses de iki kat olur (homojenlik). İki enstrümanı aynı anda çaldığında duyduğun, ikisini ayrı ayrı çaldığında duyduklarının toplamıdır (toplamsallık). İki koşulu da sağlayan sisteme <strong>lineer</strong> denir. Bu ikisinin birleşimine <strong>süperpozisyon ilkesi</strong> denir.` },
-      { t: 'def', title: 'Tanım (s. 54)', h: T`Homojenlik: $\;T\{kx\} = k\,y$ &nbsp;&nbsp;&nbsp; Toplamsallık: $\;T\{x_1 + x_2\} = y_1 + y_2$
+      { t: 'def', title: 'Tanım (s. 54)', h: T`$$\text{Homojenlik:}\;\; T\{kx\} = k\,y \qquad\qquad \text{Toplamsallık:}\;\; T\{x_1 + x_2\} = y_1 + y_2$$
 $$\text{Birlikte:}\qquad T\{k_1x_1 + k_2x_2\} = k_1y_1 + k_2y_2$$` },
       { t: 'table', head: ['Formül', 'Sözle ne diyor?', 'Sınavda ne yapıyorsun?'], rows: [
         [T`$T\{\cdot\}$, $\;x \to y$`, T`$T$ sistemin kuralı. $T\{x\}$ “$x$’i sisteme ver, çıkanı yaz” demek. $x_1 \to y_1$ ise “$x_1$ girişi $y_1$ çıkışını üretir”.`, T`Kuralda $x$ gördüğün her yere yeni girişi yazarsın.`],
@@ -33,29 +33,56 @@ $$\text{Birlikte:}\qquad T\{k_1x_1 + k_2x_2\} = k_1y_1 + k_2y_2$$` },
         T`$x_3 = ax_1 + bx_2$ girişi için $y_3$’ü <em>sistemin kuralından</em> hesapla.`,
         T`$y_3 = ay_1 + by_2$ ise lineer. Değilse lineer değil.`,
         T`<strong>Sayısal kısayol (s. 55):</strong> iki sabit giriş seç, örneğin $1 \to y_1$, $2 \to y_2$. Sonra $3 \to y_3$ hesapla. $y_3 \ne y_1 + y_2$ ise bu bir karşı örnektir. Bu yöntem lineer <em>olmadığını</em> göstermek içindir; lineer olduğunu ispatlamaz.`] },
-      { t: 'example', src: 's. 55', q: T`$y(t) = x^2(t)$ lineer midir?`,
-        steps: [T`$ax_1 \to [ax_1]^2 = a^2x_1^2$, $\quad bx_2 \to b^2x_2^2$. Toplamları: $a^2x_1^2 + b^2x_2^2$.`,
-          T`Toplam girişin çıkışı: $[ax_1 + bx_2]^2 = a^2x_1^2 + b^2x_2^2 + \hl{2ab\,x_1x_2}$`,
-          T`Fazladan bir çapraz terim var. Eşit değiller.`, T`Sayısal test: $1 \to 1$, $2 \to 4$, ama $(1+2) = 3 \to 9 \ne 1 + 4 = 5$.`],
+      { t: 'example', src: 's. 55', q: T`Aşağıdaki sistem lineer midir, değil midir?
+$$y(t) = x^2(t)$$`,
+        steps: [T`Girişleri ayrı ayrı ver, çıkışları topla:
+$$a x_1 \to (a x_1)^2 = a^2 x_1^2, \qquad b x_2 \to b^2 x_2^2$$
+$$\text{Toplam: } a^2 x_1^2 + b^2 x_2^2$$`,
+          T`Şimdi girişleri toplayıp birlikte ver:
+$$(a x_1 + b x_2)^2 = a^2 x_1^2 + b^2 x_2^2 + \hl{2ab\,x_1 x_2}$$`,
+          T`Fazladan bir çapraz terim var, iki sonuç eşit değil.`,
+          T`Sayısal test:
+$$1 \to 1, \qquad 2 \to 4, \qquad \text{ama} \quad 1 + 2 = 3 \to 9 \ne 1 + 4 = 5$$`],
         ans: T`Lineer değil. Aynı mantıkla $y = \sin x$ ve $y = x^3$ de lineer değildir.` },
-      { t: 'example', src: 's. 56', q: T`$y[n] = x[n-2]$ lineer midir?`,
-        steps: [T`$ax_1[n] \to ax_1[n-2]$, $\;bx_2[n] \to bx_2[n-2]$. Toplam: $ax_1[n-2] + bx_2[n-2]$.`, T`Toplam girişin çıkışı: $[ax_1 + bx_2][n-2] = ax_1[n-2] + bx_2[n-2]$. Eşit.`],
-        ans: T`Lineer. Kısaca: $T\{ax_1[n] + bx_2[n]\} = ax_1[n-2] + bx_2[n-2] = ay_1[n] + by_2[n]$.` },
-      { t: 'example', src: 's. 57', q: T`$\dfrac{dy}{dt} + 3y(t) = x(t)$ denklemiyle tanımlanan sistem lineer midir?`,
-        steps: [T`$\frac{dy_1}{dt} + 3y_1 = x_1$ ve $\frac{dy_2}{dt} + 3y_2 = x_2$ yaz.`, T`Birinciyi $k_1$, ikinciyi $k_2$ ile çarpıp topla: $\frac{d}{dt}[k_1y_1 + k_2y_2] + 3[k_1y_1 + k_2y_2] = k_1x_1 + k_2x_2$`,
-          T`Yani $x = k_1x_1 + k_2x_2$ girişi $y = k_1y_1 + k_2y_2$ çıkışını üretiyor.`],
+      { t: 'example', src: 's. 56', q: T`Aşağıdaki sistem lineer midir, değil midir?
+$$y[n] = x[n-2]$$`,
+        steps: [T`Girişleri ayrı ayrı ver, çıkışları topla:
+$$a x_1[n] \to a x_1[n-2], \qquad b x_2[n] \to b x_2[n-2]$$
+$$\text{Toplam: } a x_1[n-2] + b x_2[n-2]$$`,
+          T`Girişleri toplayıp birlikte ver:
+$$\big(a x_1 + b x_2\big)[n-2] = a x_1[n-2] + b x_2[n-2]$$
+İki sonuç eşit.`],
+        ans: T`Lineer:
+$$T\{a x_1[n] + b x_2[n]\} = a x_1[n-2] + b x_2[n-2] = a y_1[n] + b y_2[n]$$` },
+      { t: 'example', src: 's. 57', q: T`Aşağıdaki denklemle tanımlanan sistem lineer midir?
+$$\frac{dy}{dt} + 3y(t) = x(t)$$`,
+        steps: [T`İki giriş ve çıkışları için denklemi yaz:
+$$\frac{dy_1}{dt} + 3y_1 = x_1, \qquad \frac{dy_2}{dt} + 3y_2 = x_2$$`,
+          T`Birinciyi $k_1$, ikinciyi $k_2$ ile çarpıp topla:
+$$\frac{d}{dt}\big[k_1 y_1 + k_2 y_2\big] + 3\big[k_1 y_1 + k_2 y_2\big] = k_1 x_1 + k_2 x_2$$`,
+          T`Yani $x = k_1 x_1 + k_2 x_2$ girişi, $y = k_1 y_1 + k_2 y_2$ çıkışını üretiyor.`],
         ans: T`Lineer (başlangıç koşulu sıfır kabul edilir). Sabit katsayılı lineer diferansiyel ve fark denklemleri hep lineer sistem tanımlar.` },
-      { t: 'example', src: 's. 58', q: T`$y[n] = 2x[n] + 3$ lineer midir?`,
-        steps: [T`Hızlı test: $x[n] = 0$ ⇒ $y[n] = 3 \ne 0$. Lineer olamaz.`, T`Toplamsallık: $x_1 = 2 \to 7$, $x_2 = 3 \to 9$. Ama $x_1 + x_2 = 5 \to 13 \ne 7 + 9 = 16$.`],
+      { t: 'example', src: 's. 58', q: T`Aşağıdaki sistem lineer midir, değil midir?
+$$y[n] = 2x[n] + 3$$`,
+        steps: [T`Hızlı test, sıfır giriş:
+$$x[n] = 0 \;\Longrightarrow\; y[n] = 3 \ne 0$$
+Lineer olamaz.`,
+          T`Toplamsallık ile de görülür:
+$$x_1 = 2 \to 7, \qquad x_2 = 3 \to 9, \qquad x_1 + x_2 = 5 \to 13 \ne 7 + 9 = 16$$`],
         ans: T`Lineer değil. Grafiği düz bir çizgi olsa da sabit terim süperpozisyonu bozar. (Bu tür sistemlere “artımsal lineer” denir.)` },
       { t: 'trap', h: T`Lineerlik ile zamanla değişmezliği karıştırma! $y(t) = t\,x(t)$ <strong>lineerdir</strong>: $t$ çarpanı girişten bağımsız bir “katsayı”dır, $t(ax_1 + bx_2) = a\,tx_1 + b\,tx_2$. Lineerliği bozan şey <em>girişe</em> uygulanan doğrusal olmayan işlemlerdir: kare, sinüs, mutlak değer, sabit ekleme, $x$’e bölme.` },
       { t: 'lab', id: 'systems', opts: { prop: 'L' } },
-      { t: 'hw', src: 's. 56', q: T`(a) $y(t) = t\,x(t)$ &nbsp; (b) $y[n] = x[n]\,u[n-1]$ lineer midir?`,
-        steps: [T`(a) $T\{ax_1 + bx_2\} = t(ax_1 + bx_2) = a\,tx_1 + b\,tx_2 = ay_1 + by_2$ ✓`, T`(b) $u[n-1]$ girişten bağımsız bir çarpandır (0 veya 1): $(ax_1 + bx_2)u[n-1] = ay_1 + by_2$ ✓`],
+      { t: 'hw', src: 's. 56', q: T`Aşağıdaki sistemler lineer midir, değil midir?
+$$\text{(a)}\;\; y(t) = t\,x(t) \qquad\qquad \text{(b)}\;\; y[n] = x[n]\,u[n-1]$$`,
+        steps: [T`(a)
+$$T\{a x_1 + b x_2\} = t\,(a x_1 + b x_2) = a\,t x_1 + b\,t x_2 = a y_1 + b y_2 \;\;✓$$`,
+          T`(b) $u[n-1]$ girişten bağımsız bir çarpandır (0 veya 1):
+$$\big(a x_1[n] + b x_2[n]\big)\,u[n-1] = a y_1[n] + b y_2[n] \;\;✓$$`],
         ans: T`İkisi de lineer. (İkisi de zamanla değişendir; bunu 1.10’da göreceğiz.)` },
       { t: 'quiz', items: [
         { q: T`$y(t) = x(t) + x(t-1)$ lineer mi?`, opts: ['Evet', 'Hayır'], a: 0, why: 'Kaydırılmış girişlerin toplamı: her terim lineer, toplamları da lineer.' },
-        { q: T`$y(t) = |x(t)|$ lineer mi?`, opts: ['Evet', 'Hayır'], a: 1, why: T`Homojenlik bozulur: $x = -1$ için $y = 1$, ama $-1\cdot T\{1\} = -1$.` },
+        { q: T`$y(t) = |x(t)|$ lineer mi?`, opts: ['Evet', 'Hayır'], a: 1, why: T`Homojenlik bozulur. $x = 1$ için $y = 1$. Girişi $-1$ ile çarparsak:
+$$T\{-1\} = |-1| = 1 \ne -1\cdot T\{1\} = -1$$` },
         { q: T`$y[n] = x[n] + 1$ için en hızlı çürütme hangisidir?`, opts: ['Sıfır giriş testi', 'Uzun cebir', 'Fourier dönüşümü'], a: 0, why: T`$x = 0 \to y = 1$. Lineer bir sistem sıfıra sıfırla cevap vermek zorundadır.` }] }
     ]
   });
@@ -68,7 +95,9 @@ $$\text{Birlikte:}\qquad T\{k_1x_1 + k_2x_2\} = k_1y_1 + k_2y_2$$` },
     goals: ['Nedensel sistem tanımı', 'Argümanlara bakarak hızlı karar', 'Negatif zamandaki tuzaklar', 'Bellekli / belleksiz ayrımı'],
     blocks: [
       { t: 'idea', h: T`Canlı yayındaki bir ses efekti, şu anki ve geçmişteki sesleri kullanabilir. Bir saniye <em>sonraki</em> sesi kullanamaz, çünkü o ses henüz yok. Bu sistem <strong>nedenseldir</strong>. Ama kayıtlı bir ses dosyasını işleyen bir program “geleceğe” bakabilir, çünkü bütün kayıt elindedir. Böyle sistemler <strong>nedensel olmayan</strong> (öngörülü) sistemlerdir ve gerçekleştirilebilirler, yalnızca gerçek zamanlı çalışamazlar.` },
-      { t: 'def', title: 'Tanım (s. 59)', h: T`<strong>Nedensel:</strong> Çıkış, girişin yalnızca <em>şu anki ve geçmiş</em> değerlerine bağlıdır: $y(t)$ yalnızca $x(\tau)$, $\tau \le t$ ile hesaplanır.<br>Nedensel: $y(t) = x(t-1)$ &nbsp;&nbsp; Nedensel değil: $y(t) = x(t+2)$, $\;y[n] = x[1-n]$<br><strong>Belleksiz:</strong> Çıkış yalnızca girişin <em>o anki</em> değerine bağlıdır: $y(t) = f(x(t))$. Aksi hâlde sistem <strong>bellekli</strong>dir.` },
+      { t: 'def', title: 'Tanım (s. 59)', h: T`<strong>Nedensel:</strong> Çıkış, girişin yalnızca <em>şu anki ve geçmiş</em> değerlerine bağlıdır: $y(t)$ yalnızca $x(\tau)$, $\tau \le t$ ile hesaplanır.
+$$\text{Nedensel:}\;\; y(t) = x(t-1) \qquad\qquad \text{Nedensel değil:}\;\; y(t) = x(t+2), \;\; y[n] = x[1-n]$$
+<strong>Belleksiz:</strong> Çıkış yalnızca girişin <em>o anki</em> değerine bağlıdır: $y(t) = f(x(t))$. Aksi hâlde sistem <strong>bellekli</strong>dir.` },
       { t: 'idea', title: 'Sözle: argüman ne söyler?', h: T`$x$’in parantezinin içindeki ifade, sistemin girişin <em>hangi anına</em> baktığını söyler. $t$ şu anki saattir:<br>• $x(t)$: şu an → belleksiz, nedensel.<br>• $x(t-1)$: 1 saniye <strong>önce</strong> (geçmiş) → nedensel ama bellekli (geçmişi hatırlaması gerekiyor).<br>• $x(t+2)$: 2 saniye <strong>sonra</strong> (gelecek) → nedensel değil.<br><strong>Neden var?</strong> Nedensellik “bu sistem gerçek zamanlı kurulabilir mi?” sorusunun cevabıdır. Bellek ise “sistemin bir hafızaya (kondansatör, kayıt, değişken) ihtiyacı var mı?” sorusunun.` },
       { t: 'recipe', title: 'Hızlı karar', steps: [
         T`Kuraldaki $x(\cdot)$’lerin <strong>bütün argümanlarını</strong> listele.`,
@@ -76,21 +105,30 @@ $$\text{Birlikte:}\qquad T\{k_1x_1 + k_2x_2\} = k_1y_1 + k_2y_2$$` },
         T`Negatif zamanları unutma: $x(2t)$ veya $x[-n]$, $t>0$ veya $n<0$ için geleceğe bakar.`,
         T`$x$’in <em>dışında</em> kalan $t$’ler ($\cos(t+1)$, $t\,x(t)$) nedenselliği etkilemez.`,
         T`Bellek: bütün argümanlar tam olarak $t$ ise sistem belleksizdir.`] },
-      { t: 'example', src: 's. 59', q: T`$y[n] = x[-n]$ nedensel midir?`,
+      { t: 'example', src: 's. 59', q: T`Aşağıdaki sistem nedensel midir, değil midir?
+$$y[n] = x[-n]$$`,
         steps: [T`İlk bakışta $n>0$ için $-n < n$, yani geçmişe bakıyor gibi görünür. Örneğin $y[3] = x[-3]$.`, T`Ama $n<0$ için durum tersine döner: $y[-4] = x[4]$. Çıkış, girişin gelecekteki değerine bağlı.`],
         ans: T`Nedensel değil. Bir tek $n$ bile geleceğe bakıyorsa sistem nedensel değildir.` },
       { t: 'erratum', src: 's. 59', h: T`Notta $y[n] = x[n/2]$ nedensel örnekler arasında yer alıyor. Bu ifade, aynı sayfadaki $x[-n]$ mantığıyla nedensel <strong>değildir</strong>: $n=-2$ için $y[-2] = x[-1]$ olur ve $-1 > -2$, yani gelecek. Büyük olasılıkla $x[n-2]$ kastedilmiş. ($n \ge 0$ ile sınırlı girişlerde $x[n/2]$ sorun çıkarmaz, ama genel tanım her $n$ için geçerli olmalıdır.)` },
-      { t: 'example', src: 's. 60', q: T`$y(t) = x(t+1) + 2x(t) - 3x(t-1)$ nedensel midir?`,
+      { t: 'example', src: 's. 60', q: T`Aşağıdaki sistem nedensel midir, değil midir?
+$$y(t) = x(t+1) + 2x(t) - 3x(t-1)$$`,
         steps: [T`Argümanlar: $t+1$, $t$, $t-1$.`, T`$t + 1 > t$: gelecek.`], ans: T`Nedensel değil, çünkü $y(t)$ gelecek giriş $x(t+1)$’e bağlı.` },
-      { t: 'example', src: 's. 60', q: T`$y(t) = x(t)\cos(t+1)$ nedensel midir?`,
+      { t: 'example', src: 's. 60', q: T`Aşağıdaki sistem nedensel midir, değil midir?
+$$y(t) = x(t)\cos(t+1)$$`,
         steps: [T`$x$’in tek argümanı $t$. Şu an.`, T`$\cos(t+1)$ bir $g(t)$ fonksiyonudur, girişle ilgisi yok. İçindeki “$+1$” geleceğe bakmak anlamına gelmez.`],
         ans: T`Nedensel. Ayrıca belleksiz: $y(t)$ yalnızca $x(t)$’ye bağlı.` },
       { t: 'lab', id: 'systems', opts: { prop: 'C' } },
-      { t: 'hw', src: 's. 60', q: T`(a) $y(t) = 2x(t) - x(t-1) + 3x(t-2)$ &nbsp; (b) $y[n] = 3x[n-1]$ &nbsp; (c) $y[n] = 2x^2[n+1]$. Nedensel mi? Bellekli mi?`,
-        steps: [T`(a) Argümanlar $t, t-1, t-2 \le t$: nedensel. $t-1$, $t-2$ olduğu için bellekli.`, T`(b) $n-1 < n$: nedensel, bellekli.`, T`(c) $n+1 > n$: nedensel değil, bellekli.`],
-        ans: T`(a) Nedensel, bellekli · (b) Nedensel, bellekli · (c) Nedensel değil, bellekli` },
+      { t: 'hw', src: 's. 60', q: T`Aşağıdaki sistemler nedensel midir? Bellekli midir?
+$$\text{(a)}\;\; y(t) = 2x(t) - x(t-1) + 3x(t-2)$$
+$$\text{(b)}\;\; y[n] = 3x[n-1] \qquad\qquad \text{(c)}\;\; y[n] = 2x^2[n+1]$$`,
+        steps: [T`(a) Argümanlar $t,\; t-1,\; t-2$. Hepsi $\le t$: nedensel. $t-1$ ve $t-2$ geçmiş olduğu için bellekli.`,
+          T`(b) Argüman $n - 1 < n$: nedensel ve bellekli.`,
+          T`(c) Argüman $n + 1 > n$: gelecek, nedensel değil. Bellekli.`],
+        ans: T`(a) Nedensel, bellekli<br>(b) Nedensel, bellekli<br>(c) Nedensel değil, bellekli` },
       { t: 'quiz', items: [
-        { q: T`$y(t) = x(t/2)$ nedensel mi?`, opts: ['Evet', 'Hayır'], a: 1, why: T`$t = -2$ için $y(-2) = x(-1)$ olur ve $-1 > -2$. Negatif zamanda geleceğe bakıyor.` },
+        { q: T`$y(t) = x(t/2)$ nedensel mi?`, opts: ['Evet', 'Hayır'], a: 1, why: T`$t = -2$ anını dene:
+$$y(-2) = x\!\left(\frac{-2}{2}\right) = x(-1)$$
+$-1 > -2$, yani çıkış gelecekteki girişe bakıyor. Negatif zamanda geleceğe bakması yeterli: nedensel değil.` },
         { q: T`$y(t) = \int_{-\infty}^{t} x(\tau)d\tau$ bellekli mi?`, opts: ['Bellekli', 'Belleksiz'], a: 0, why: 'Bütün geçmişi biriktiriyor.' },
         { q: T`$y[n] = n^2 x[n]$ için hangisi doğru?`, opts: ['Nedensel ve belleksiz', 'Nedensel değil', 'Bellekli'], a: 0, why: T`Tek argüman $n$. Dışarıdaki $n^2$ yalnızca bir katsayı.` }] }
     ]
@@ -112,29 +150,55 @@ $$\text{Birlikte:}\qquad T\{k_1x_1 + k_2x_2\} = k_1y_1 + k_2y_2$$` },
         T`<strong>Çıkışı kaydır:</strong> $y(t)$ ifadesindeki <strong>bütün</strong> $t$’leri $t - t_0$ yap. Sonuç: $y(t-t_0)$.`,
         T`İkisi eşitse zamanla değişmez, değilse değişen.`,
         T`<strong>Kısa yol:</strong> kuralda $x$’in dışında açık bir $t$ veya $n$ varsa ($t\,x(t)$, $\cos(t)x(t)$, $2n\,x[n]$) ya da argümanda $t$’nin katsayısı $\pm1$ değilse ($x(2t)$, $x(-t)$, $x[1-n]$) sistem zamanla <strong>değişen</strong>dir.`] },
-      { t: 'example', src: 's. 63', q: T`$y[n] = 3x[n-1]$ zamanla değişmez mi?`,
-        steps: [T`Girişi kaydır: $T\{x[n-k]\} = 3x[n-k-1]$.`, T`Çıkışı kaydır: $y[n-k] = 3x[n-k-1]$.`, T`İkisi aynı.`], ans: T`Zamanla değişmez.` },
-      { t: 'example', src: 's. 63', q: T`$y[n] = 2n\,x[n]$ zamanla değişmez mi?`,
-        steps: [T`Girişi kaydır: $T\{x[n-k]\} = 2n\,x[n-k]$ ($n$’ye dokunmadık).`, T`Çıkışı kaydır: $y[n-k] = 2(n-k)\,x[n-k]$.`, T`$2n \ne 2(n-k)$.`], ans: T`Zamanla değişen. (Ama lineer!)` },
-      { t: 'example', src: 's. 62', q: T`(a) $\dfrac{dy}{dt} + y(t) = x(t)$ &nbsp; (b) $y(t) = \int_{-\infty}^{t} x(\tau)\,d\tau$ zamanla değişmez mi?`,
-        steps: [T`(a) $x_1(t) = x(t-t_0)$ için $\frac{dy_1}{dt} + y_1 = x(t-t_0)$. Bu denklemi $y_1(t) = y(t-t_0)$ sağlar, çünkü katsayılar sabit.`,
-          T`(b) $T\{x(t-t_0)\} = \int_{-\infty}^{t} x(\tau - t_0)d\tau$. $s = \tau - t_0$ koy: $= \int_{-\infty}^{t-t_0} x(s)\,ds = y(t-t_0)$.`],
-        ans: T`İkisi de zamanla değişmez.` },
-      { t: 'example', src: 's. 63', q: T`$y(t) = x(t)\cos\omega_c t$ sisteminin nedensel ve zamanla değişen bir sistem olduğunu göster.`,
-        steps: [T`Nedensel: çıkış girişin gelecek değerlerine bağlı değil.`, T`Girişi kaydır: $y_o(t) = x(t-t_0)\cos\omega_c t$`, T`Çıkışı kaydır: $y(t-t_0) = x(t-t_0)\cos\omega_c(t-t_0) \ne y_o(t)$`],
-        ans: T`Nedensel ve zamanla değişen.` },
-      { t: 'example', src: 's. 64–65', title: 'Grafikle karşı örnek', q: T`$y(t) = x(2t)$ zamanla değişmez mi? $x_1(t) = 1$ ($-2<t<2$) girişiyle grafikle göster.`,
-        steps: [T`$y_1(t) = x_1(2t)$: $-2 < 2t < 2$ → $-1 < t < 1$.`,
-          T`Girişi 2 kaydır: $x_2(t) = x_1(t-2)$, $0<t<4$ aralığında 1. Çıkışı: $y_2(t) = x_2(2t)$ → $0 < 2t < 4$ → $0<t<2$.`,
-          { h: T`Çıkışı 2 kaydır: $y_1(t-2)$, $1<t<3$ aralığında 1. Bu $y_2$ ile aynı değil!`, fig: [spec([-3, 5], [-0.2, 1.3], [fn(box(0, 2), 'y')], { title: 'y₂(t) = T{x₁(t − 2)}', xStep: 1 }), spec([-3, 5], [-0.2, 1.3], [fn(box(1, 3), 'h')], { title: 'y₁(t − 2)', xStep: 1 })] }],
+      { t: 'example', src: 's. 63', q: T`Aşağıdaki sistem ötelemeyle değişmez midir?
+$$y[n] = 3x[n-1]$$`,
+        steps: [T`Girişi kaydır, sisteme ver:
+$$T\{x[n-k]\} = 3x[n-k-1]$$`, T`Çıkışı kaydır:
+$$y[n-k] = 3x[(n-k)-1] = 3x[n-k-1]$$`, T`İkisi aynı.`], ans: T`Ötelemeyle değişmez.` },
+      { t: 'example', src: 's. 63', q: T`Aşağıdaki sistem ötelemeyle değişmez midir?
+$$y[n] = 2n\,x[n]$$`,
+        steps: [T`Girişi kaydır, sisteme ver. Açıktaki $n$’ye dokunma:
+$$T\{x[n-k]\} = 2n\,x[n-k]$$`, T`Çıkışı kaydır. Bu kez bütün $n$’ler değişir:
+$$y[n-k] = 2(n-k)\,x[n-k]$$`, T`$2n \ne 2(n-k)$, iki sonuç farklı.`], ans: T`Ötelemeyle değişen. (Ama lineer!)` },
+      { t: 'example', src: 's. 62', q: T`Aşağıdaki sistemler ötelemeyle değişmez midir?
+$$\text{(a)}\;\; \frac{dy}{dt} + y(t) = x(t) \qquad\qquad \text{(b)}\;\; y(t) = \int_{-\infty}^{t} x(\tau)\,d\tau$$`,
+        steps: [T`(a) Giriş $x_1(t) = x(t - t_0)$ olsun:
+$$\frac{dy_1}{dt} + y_1 = x(t - t_0)$$
+Katsayılar sabit olduğu için bu denklemi $y_1(t) = y(t - t_0)$ sağlar.`,
+          T`(b) Girişi kaydır ve $s = \tau - t_0$ değişken değiştirmesi yap:
+$$T\{x(t - t_0)\} = \int_{-\infty}^{t} x(\tau - t_0)\,d\tau = \int_{-\infty}^{t - t_0} x(s)\,ds = y(t - t_0)$$`],
+        ans: T`İkisi de ötelemeyle değişmez.` },
+      { t: 'example', src: 's. 63', q: T`Aşağıdaki sistemin nedensel ve ötelemeyle değişen bir sistem olduğunu gösteriniz.
+$$y(t) = x(t)\cos\omega_c t$$`,
+        steps: [T`Nedensellik: çıkış yalnızca $x(t)$’ye bağlı, gelecek değerlere bağlı değil.`,
+          T`Girişi kaydır, sisteme ver:
+$$y_o(t) = x(t - t_0)\cos\omega_c t$$`,
+          T`Çıkışı kaydır:
+$$y(t - t_0) = x(t - t_0)\cos\omega_c (t - t_0) \ne y_o(t)$$`],
+        ans: T`Nedensel ve ötelemeyle değişen.` },
+      { t: 'example', src: 's. 64–65', title: 'Grafikle karşı örnek', q: T`Aşağıdaki sistem ötelemeyle değişmez midir? Verilen $x_1(t)$ girişiyle grafik üzerinde gösteriniz.
+$$y(t) = x(2t), \qquad x_1(t) = \begin{cases} 1, & -2 < t < 2 \\ 0, & \text{diğer} \end{cases}$$`,
+        steps: [T`Önce $x_1$’in çıkışı:
+$$y_1(t) = x_1(2t): \quad -2 < 2t < 2 \;\Longrightarrow\; -1 < t < 1$$`,
+          T`Girişi 2 kaydır: $x_2(t) = x_1(t - 2)$, $0 < t < 4$ aralığında 1. Bunun çıkışı:
+$$y_2(t) = x_2(2t): \quad 0 < 2t < 4 \;\Longrightarrow\; 0 < t < 2$$`,
+          { h: T`Çıkışı 2 kaydır: $y_1(t - 2)$, $1 < t < 3$ aralığında 1. Bu $y_2$ ile aynı değil!`, fig: [spec([-3, 5], [-0.2, 1.3], [fn(box(0, 2), 'y')], { title: 'y₂(t) = T{x₁(t − 2)}', xStep: 1 }), spec([-3, 5], [-0.2, 1.3], [fn(box(1, 3), 'h')], { title: 'y₁(t − 2)', xStep: 1 })] }],
         ans: T`Zamanla değişen. Aslında $y_2(t) = y_1(t-1)$: zaman sıkıştırması yüzünden kayma yarıya iniyor.` },
       { t: 'lab', id: 'systems', opts: { prop: 'TI' } },
-      { t: 'hw', src: 's. 63', q: T`$y(t) = x(t-3)$ nedensel midir, zamanla değişen midir?`,
-        steps: [T`Argüman $t - 3 < t$: nedensel.`, T`$T\{x(t-t_0)\} = x(t - 3 - t_0) = y(t-t_0)$: zamanla değişmez.`], ans: T`Nedensel ve zamanla değişmez. (Saf gecikme, LTI sistemlerin en basitidir.)` },
+      { t: 'hw', src: 's. 63', q: T`Aşağıdaki sistem nedensel midir? Ötelemeyle değişmez midir?
+$$y(t) = x(t - 3)$$`,
+        steps: [T`Argüman $t - 3 < t$: nedensel.`, T`Öteleme testi:
+$$T\{x(t - t_0)\} = x(t - 3 - t_0) = y(t - t_0)$$
+Ötelemeyle değişmez.`], ans: T`Nedensel ve ötelemeyle değişmez. (Saf gecikme, LTI sistemlerin en basitidir.)` },
       { t: 'quiz', items: [
         { q: T`$y[n] = x[n]\,u[n-1]$ zamanla değişmez mi?`, opts: ['Evet', 'Hayır'], a: 1, why: T`$u[n-1]$, $n=1$’de açılan sabit bir anahtar. Girişi kaydırırsan anahtar kaymaz.` },
-        { q: T`$y(t) = x(t) + 5$ zamanla değişmez mi?`, opts: ['Evet (ama lineer değil)', 'Hayır'], a: 0, why: T`Kuralda açık bir $t$ yok. $x(t-t_0) + 5 = y(t-t_0)$.` },
-        { q: T`$y(t) = x(-t)$ için hangisi doğru?`, opts: ['Zamanla değişmez', 'Zamanla değişen'], a: 1, why: T`$T\{x(t-t_0)\} = x(-t-t_0)$ ama $y(t-t_0) = x(-t+t_0)$.` }] }
+        { q: T`$y(t) = x(t) + 5$ zamanla değişmez mi?`, opts: ['Evet (ama lineer değil)', 'Hayır'], a: 0, why: T`Kuralda açık bir $t$ yok. İki yol aynı sonucu verir:
+$$T\{x(t - t_0)\} = x(t - t_0) + 5 = y(t - t_0)$$
+Sıfır giriş 5 verdiği için lineer değil.` },
+        { q: T`$y(t) = x(-t)$ için hangisi doğru?`, opts: ['Zamanla değişmez', 'Zamanla değişen'], a: 1, why: T`İki yolu karşılaştır:
+$$T\{x(t - t_0)\} = x(-t - t_0)$$
+$$y(t - t_0) = x\big(-(t - t_0)\big) = x(-t + t_0)$$
+İkisi farklı: zamanla değişen.` }] }
     ]
   });
 
@@ -155,30 +219,59 @@ $$|x(t)| \le k_1 \;\;\Longrightarrow\;\; |y(t)| \le k_2$$` },
         T`<strong>Kararlı olduğunu göstermek için:</strong> $|x| \le B$ varsay ve $|y|$’yi yalnızca $B$’ye bağlı bir sayıyla sınırla. Örnek: $|\sin(\cdot)| \le 1$, $\;|x[1-n]| \le B$, $\;e^{-B} < e^{x} < e^{B}$.`,
         T`<strong>Kararsız olduğunu göstermek için:</strong> tek bir sınırlı giriş bul, çıkışı sınırsız olsun. Önce sabit $x = 1$ veya $u(t)$ dene (s. 68).`,
         T`Şüpheli işaretler: kuralda $t$ veya $n$ ile çarpma, integral veya birikimli toplam, girişe bölme.`] },
-      { t: 'example', src: 's. 66', q: T`(a) $y = \sin[x(t)]$ &nbsp; (b) $y = \int_{-\infty}^{t}x(\tau)d\tau$ &nbsp; (c) $y[n] = x[1-n]$ &nbsp; (d) $y[n] = 2n\,x[n]$. Kararlı mı?`,
-        steps: [T`(a) $|\sin(\cdot)| \le 1$, giriş ne olursa olsun: <strong>kararlı</strong>.`, T`(b) $x = u(t)$ sınırlı, ama $y = \int_0^t 1\,d\tau = t$ sınırsız: <strong>kararsız</strong>.`,
-          T`(c) $|x[n]| < B$ ⇒ $|y[n]| = |x[1-n]| < B$: <strong>kararlı</strong>.`, T`(d) $x = 1$ için $y = 2n$, sınırsız: <strong>kararsız</strong>.`],
-        ans: T`(a) kararlı · (b) kararsız · (c) kararlı · (d) kararsız` },
-      { t: 'example', src: 's. 68', q: T`$S_1: y(t) = t\,x(t)$ ve $S_2: y(t) = e^{x(t)}$ kararlı mı?`,
-        steps: [T`$S_1$: $x(t) = 1$ sınırlı, $y(t) = t$ sınırsız. Kararsız.`, T`$S_2$: $-B < x < B$ ⇒ $e^{-B} < y < e^{B}$. Her sınırlı giriş sınırlı çıkış verir. Kararlı.`],
+      { t: 'example', src: 's. 66', q: T`Aşağıdaki sistemler kararlı mıdır?
+$$\text{(a)}\;\; y(t) = \sin\big[x(t)\big] \qquad\qquad \text{(b)}\;\; y(t) = \int_{-\infty}^{t} x(\tau)\,d\tau$$
+$$\text{(c)}\;\; y[n] = x[1-n] \qquad\qquad \text{(d)}\;\; y[n] = 2n\,x[n]$$`,
+        steps: [T`(a) Sinüs hiçbir zaman 1’i geçmez:
+$$|y(t)| = \big|\sin[x(t)]\big| \le 1$$
+Giriş ne olursa olsun çıkış sınırlı: <strong>kararlı</strong>.`,
+          T`(b) Sınırlı giriş $x(t) = u(t)$ dene:
+$$y(t) = \int_0^t 1\,d\tau = t \;\to\; \infty$$
+<strong>Kararsız</strong>.`,
+          T`(c)
+$$|x[n]| < B \;\Longrightarrow\; |y[n]| = |x[1-n]| < B$$
+<strong>Kararlı</strong>.`,
+          T`(d) Sınırlı giriş $x[n] = 1$ dene:
+$$y[n] = 2n \;\to\; \infty$$
+<strong>Kararsız</strong>.`],
+        ans: T`(a) Kararlı<br>(b) Kararsız<br>(c) Kararlı<br>(d) Kararsız` },
+      { t: 'example', src: 's. 68', q: T`Aşağıdaki iki sistem kararlı mı, kararsız mı?
+$$S_1:\;\; y(t) = t\,x(t) \qquad\qquad S_2:\;\; y(t) = e^{x(t)}$$`,
+        steps: [T`$S_1$: Sınırlı giriş $x(t) = 1$ için $y(t) = t$, sınırsız büyür. Kararsız.`,
+          T`$S_2$: Giriş sınırlıysa üstel fonksiyon da sınırlı kalır:
+$$-B < x(t) < B \;\Longrightarrow\; e^{-B} < y(t) < e^{B}$$
+Kararlı.`],
         ans: T`$S_1$ kararsız, $S_2$ kararlı.` },
       { t: 'lab', id: 'systems', opts: { prop: 'St' } },
       { t: 'h', h: 'Dört özelliği birlikte analiz etmek', src: 's. 67' },
-      { t: 'example', src: 's. 67', q: T`$y[n] = x[1-n]$ sistemine zamanla değişmezlik, lineerlik, nedensellik ve kararlılık analizi yap.`,
-        steps: [T`<strong>Zamanla değişmezlik:</strong> $T\{x[n-N]\} = x[1-n-N]$, ama $y[n-N] = x[1-(n-N)] = x[1-n+N]$. Farklı: <strong>zamanla değişen</strong>.`,
-          T`<strong>Lineerlik:</strong> $x = \alpha x_1 + \beta x_2$ ⇒ $y[n] = \alpha x_1[1-n] + \beta x_2[1-n] = \alpha y_1 + \beta y_2$: <strong>lineer</strong>.`,
-          T`<strong>Nedensellik:</strong> $y[0] = x[1]$, giriş değeri geleceğe bağlı: <strong>nedensel değil</strong>.`,
-          T`<strong>Kararlılık:</strong> $|x[n]| < B$ ⇒ $|y[n]| = |x[1-n]| < B$: <strong>kararlı</strong>.`],
-        ans: T`Zamanla değişen · lineer · nedensel değil · kararlı` },
+      { t: 'example', src: 's. 67', q: T`Aşağıdaki sisteme zamanla değişmezlik, lineerlik, nedensellik ve kararlılık analizi yapınız.
+$$y[n] = x[1-n]$$`,
+        steps: [T`<strong>Zamanla değişmezlik:</strong>
+$$T\{x[n-N]\} = x[1-n-N]$$
+$$y[n-N] = x[1-(n-N)] = x[1-n+N]$$
+İkisi farklı: <strong>zamanla değişen</strong>.`,
+          T`<strong>Lineerlik:</strong>
+$$x = \alpha x_1 + \beta x_2 \;\Longrightarrow\; y[n] = \alpha x_1[1-n] + \beta x_2[1-n] = \alpha y_1[n] + \beta y_2[n]$$
+<strong>Lineer</strong>.`,
+          T`<strong>Nedensellik:</strong> $n = 0$ için $y[0] = x[1]$. Çıkış girişin gelecek değerine bağlı: <strong>nedensel değil</strong>.`,
+          T`<strong>Kararlılık:</strong>
+$$|x[n]| < B \;\Longrightarrow\; |y[n]| = |x[1-n]| < B$$
+<strong>Kararlı</strong>.`],
+        ans: T`Zamanla değişen<br>Lineer<br>Nedensel değil<br>Kararlı` },
       { t: 'recipe', title: 'Sınav kâğıdına nasıl yazılır? (dört özellik şablonu)', steps: [
         T`<strong>Zamanla değişmezlik:</strong> “$y_1(t) = T\{x(t-t_0)\} = \ldots$ ve $y(t-t_0) = \ldots$. İkisi eşit/farklı, o hâlde zamanla değişmez/değişen.” İki satırı da mutlaka yaz.`,
         T`<strong>Lineerlik:</strong> “$x = \alpha x_1 + \beta x_2$ için $y = \ldots = \alpha y_1 + \beta y_2$ ⇒ lineer.” Lineer değilse en kısa karşı örneği yaz: “$x = 0 \Rightarrow y = 3 \ne 0$” veya “$1 \to 1$, $2 \to 4$, $3 \to 9 \ne 5$”.`,
         T`<strong>Nedensellik:</strong> bir $t$ değeri seç ve göster: “$y(0) = x(1)$, gelecekteki girişe bağlı ⇒ nedensel değil.” Nedenselse: “bütün argümanlar $\le t$ ⇒ nedensel.”`,
         T`<strong>Kararlılık:</strong> kararlıysa “$|x| < B \Rightarrow |y| \le \ldots < \infty$”. Kararsızsa “$x(t) = 1$ sınırlı ama $y(t) = t \to \infty$”.`,
         T`Her özellik için <em>tek satırlık gerekçe</em> yeter. Sadece “evet/hayır” yazmak tam puan getirmez.`] },
-      { t: 'hw', src: 's. 67', q: T`$y(t) = \dfrac{x(t)}{1 + x(t-1)}$ sistemine dört özellik analizi yap.`, hint: T`Kararlılık için paydayı sıfır yapan sınırlı bir giriş ara.`,
-        steps: [T`<strong>Zamanla değişmezlik:</strong> $T\{x(t-t_0)\} = \frac{x(t-t_0)}{1 + x(t-1-t_0)} = y(t-t_0)$: değişmez (kuralda açık $t$ yok).`,
-          T`<strong>Lineerlik:</strong> $T\{2x\} = \frac{2x(t)}{1 + 2x(t-1)} \ne \frac{2x(t)}{1 + x(t-1)}$: lineer değil.`,
+      { t: 'hw', src: 's. 67', q: T`Aşağıdaki sisteme zamanla değişmezlik, lineerlik, nedensellik ve kararlılık analizi yapınız.
+$$y(t) = \frac{x(t)}{1 + x(t-1)}$$`, hint: T`Kararlılık için paydayı sıfır yapan sınırlı bir giriş ara.`,
+        steps: [T`<strong>Zamanla değişmezlik:</strong> kuralda açık $t$ yok.
+$$T\{x(t - t_0)\} = \frac{x(t - t_0)}{1 + x(t - 1 - t_0)} = y(t - t_0)$$
+Zamanla değişmez.`,
+          T`<strong>Lineerlik:</strong> girişi 2 katına çıkar:
+$$T\{2x\} = \frac{2x(t)}{1 + 2x(t-1)} \ne 2\,y(t) = \frac{2x(t)}{1 + x(t-1)}$$
+Lineer değil.`,
           T`<strong>Nedensellik:</strong> argümanlar $t$ ve $t-1$: nedensel (ve bellekli).`,
           T`<strong>Kararlılık:</strong> $x(t) = -1$ sınırlı, ama payda $1 + (-1) = 0$: çıkış sınırsız. Kararsız.`],
         ans: T`Zamanla değişmez · lineer değil · nedensel · kararsız. Tezgâhta “Kararlılık” sekmesinde $x = -1$ ile dene.` },
@@ -187,7 +280,9 @@ $$|x(t)| \le k_1 \;\;\Longrightarrow\;\; |y(t)| \le k_2$$` },
       { t: 'p', h: T`L: lineer, ZD: zamanla değişmez, N: nedensel, K: kararlı, B: bellekli. Tabloya bakmadan önce kendin karar ver, sonra kontrol et. Gerekçeler test tezgâhındaki “Notun cevabını göster” düğmesinde.` },
       { t: 'table', head: ['Sistem', 'Not', 'L', 'ZD', 'N', 'K', 'B'], rows: SYS.map((s) => ['$' + s.tex + '$', s.src, yn(s.L[0]), yn(s.TI[0]), yn(s.C[0]), yn(s.St[0]), yn(s.M[0])]) },
       { t: 'quiz', items: [
-        { q: T`$y[n] = \sum_{k=-\infty}^{n} x[k]$ (birikimli toplam) kararlı mı?`, opts: ['Evet', 'Hayır'], a: 1, why: T`$x = u[n]$ için $y[n] = (n+1)u[n]$, sınırsız büyür.` },
+        { q: T`$y[n] = \sum_{k=-\infty}^{n} x[k]$ (birikimli toplam) kararlı mı?`, opts: ['Evet', 'Hayır'], a: 1, why: T`Sınırlı giriş $x[n] = u[n]$ dene:
+$$y[n] = \sum_{k=-\infty}^{n}u[k] = (n+1)\,u[n]$$
+Sınırsız büyür: kararsız.` },
         { q: T`$y(t) = x(t)\,e^{-|t|}$ kararlı mı?`, opts: ['Evet', 'Hayır'], a: 0, why: T`$|y| \le B\cdot e^{-|t|} \le B$.` },
         { q: 'Bir sistemin kararsız olduğunu göstermek için ne gerekir?', opts: ['Bütün sınırlı girişleri denemek', 'Tek bir sınırlı girişin sınırsız çıkış verdiğini göstermek', 'Sistemin lineer olması'], a: 1, why: 'Tek bir karşı örnek yeter. Kararlılık ise her giriş için ispatlanmalıdır.' }] }
     ]
