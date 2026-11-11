@@ -37,6 +37,15 @@
 <li>$t\,x(t)$’yi lineer değil sanmak (lineerdir, ama zamanla değişen ve kararsızdır).</li>
 <li>$x[-n]$ ve $x(2t)$ gibi sistemlerde negatif zamanı kontrol etmeden “nedensel” demek.</li></ol>` },
 
+      { t: 'h', h: 'Karma soru: hepsi tek soruda' },
+      { t: 'p', h: T`Hoca bir giriş sinyali ve bir sistem verip temel periyodu, lineerliği, ötelemeyle değişmezliği, nedenselliği ve kararlılığı <strong>aynı soruda</strong> sorabilir. Her parça ayrı puan getirir; birinde takılırsan diğerlerine geç. Çözümlü örnekler <a href="#/deneme/5">Deneme 5</a>’te, rastgele üretilen sınırsız benzeri <a href="#/antrenman">Antrenman</a> sayfasının “Sınav tipi karma soru” modunda.` },
+      { t: 'recipe', title: 'Karma soru reçetesi: 6 bakışta sistem', steps: [
+        T`<strong>Periyot:</strong> her $\omega$ için $T_i = 2\pi/\omega_i$ yaz → oranlar rasyonel mi → EKOK. Ayrıkta $\Omega/2\pi$’nin paydası. (Sistemi beklemeden önce bunu bitir; sistemden bağımsızdır.)`,
+        T`<strong>Lineer mi?</strong> Önce sıfır giriş testi ($+3$ gibi sabit var mı?). Sonra $x$’e uygulanan işlem: kare, mutlak değer, $\sin x$, $e^{x}$, $x\cdot x$ varsa lineer değil. $t$ ile, $\cos t$ ile çarpmak lineerliği <em>bozmaz</em>.`,
+        T`<strong>Ötelemeyle değişmez mi?</strong> $x$’in dışında açık $t$ / $n$ var mı ($t\,x$, $\cos(t)\,x$, $n\,x[n]$, $+n$)? Argümanda $t$’nin katsayısı $\pm1$ dışında mı ya da işaret ters mi ($x(2t)$, $x(-t)$, $x[1-n]$)? İkisinden biri varsa değişen.`,
+        T`<strong>Nedensel mi?</strong> $x$’in bütün argümanlarını $t$ ile karşılaştır: $t+1$ gibi bir şey varsa değil. $x(2t)$, $x(t/2)$, $x(-t)$ için hem pozitif hem negatif bir $t$ dene.`,
+        T`<strong>Kararlı mı?</strong> Kuralda $t$/$n$ ile büyüyen çarpan ($t$, $n$, $2^n$), $\int_{-\infty}^{t}$ veya $\sum_{-\infty}^{n}$, girişe bölme varsa $x = 1$ veya $u$ ile karşı örnek ara. Yoksa $|y| \le$ (B’li bir sayı) yaz.`,
+        T`<strong>Çıkış periyodik mi?</strong> Sistem zamanla değişmezse <em>her zaman</em> evet, periyot girişinkiyle aynı (ya da onun böleni). Zamanla değişense $y$’yi açıkça yazıp kontrol et: $x(2t)$ periyodu yarıya indirir, $n\,x[n]$ periyodikliği bozar.`] },
       { t: 'h', h: 'Deneme 1 · Periyodiklik', src: 's. 6–15' },
       { t: 'hw', title: 'Deneme sorusu', q: T`$x(t) = 3\cos\left(4t + \frac{\pi}{3}\right) + 2\sin(6t) - \cos(10t)$ periyodik midir? Periyodikse temel periyodu nedir?`, hint: T`Fazlar ve genlikler önemsiz. Yalnızca $\omega = 4, 6, 10$ değerlerine bak.`,
         steps: [T`$T_1 = \frac{2\pi}{4} = \frac{\pi}{2}$, $\;T_2 = \frac{2\pi}{6} = \frac{\pi}{3}$, $\;T_3 = \frac{2\pi}{10} = \frac{\pi}{5}$`,

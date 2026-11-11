@@ -29,7 +29,21 @@ Vize kapsamı Bölüm 1’dir; Bölüm 2 sitede “vize dışı” olarak işare
 
 Her derste ayrıca bir **çözüm reçetesi** (o soru tipinin adım adım yöntemi) ve **dikkat** kutuları (sık yapılan hatalar) bulunur.
 
-**Deneme vizeleri** sayfasında hocanın sınav formatında (3 ana soru, altında 1.1, 1.2… alt sorular) hazırlanmış 4 tam deneme vardır. Sorular, ders notunun da dayandığı H. Hsu, *Schaum’s Outline of Signals and Systems* (2. baskı) kitabının 1. bölümünden vize kapsamına girenler seçilerek Türkçeleştirildi ve adım adım çözüldü. Her alt sorunun altında konunun anlatıldığı derse bağlantı bulunur.
+## Kalıcı öğrenme: Antrenman
+
+Okumak tanıdık hissettirir ama kalıcı yapmaz. **Antrenman** sayfası üç öğrenme ilkesini birleştirir:
+
+- **Geri çağırma:** Her soru rastgele üretilir (ezberlenemez); cevaptan sonra kısa bir gerekçe gösterilir.
+- **Karıştırma:** Karışık tekrar modunda soru tipleri karışık gelir, “hangi yöntem?” kararı sınavdaki gibi her seferinde yeniden verilir.
+- **Aralıklı tekrar:** Her beceri bir Leitner kutusunda tutulur. Art arda 3 doğru seviye atlatır, tek yanlış başa döndürür; beceri 1, 3, 7 gün sonra yeniden gelir. Kenar çubuğu ve ana sayfa bugün tekrar edilecek becerileri gösterir.
+
+10 beceri: sürekli ve ayrık temel periyot, enerji/güç, çift/tek, δ’lı integral, x(ct+d) aralığı, lineerlik, nedensellik, ötelemeyle değişmezlik, kararlılık. **Sınav tipi karma soru** modu, hocanın tarzında tek soruda giriş sinyalinin temel periyodunu ve sistemin dört özelliğini birlikte sorar (sistem havuzu: nottaki 21 sistem + 24 ek sistem).
+
+Soru üreteci (`js/trainer.js`) DOM’dan bağımsızdır. Her soru tipi Node.js ile sayısal olarak doğrulandı: verilen periyotta sinyalin gerçekten tekrar ettiği ve daha küçük periyot olmadığı, enerji/güç değerlerinin sayısal integrale uyduğu, aralıkların ve çift/tek sınıfının doğru olduğu (30.000 üretilmiş soru).
+
+## Deneme vizeleri
+
+Hocanın sınav formatında (3 ana soru, altında 1.1, 1.2… alt sorular) hazırlanmış 5 deneme vardır. İlk dördü, ders notunun da dayandığı H. Hsu, *Schaum’s Outline of Signals and Systems* (2. baskı) kitabının 1. bölümünden vize kapsamına girenler seçilerek Türkçeleştirildi ve adım adım çözüldü. **Deneme 5** karma sorulardan oluşur: her ana soruda bir giriş sinyali ve bir sistem verilir; temel periyot, lineerlik, ötelemeyle değişmezlik, nedensellik, kararlılık ve çıkışın periyodikliği birlikte sorulur. Her alt sorunun altında konunun anlatıldığı derse bağlantı bulunur.
 
 **Vize hazırlık** sayfasında Bölüm 1’in bütün soru tiplerinin haritası, en çok puan kaybettiren hatalar ve notun tarzında yeni deneme soruları vardır. **Formül kağıdı** sınav öncesi tek sayfalık özettir.
 
@@ -105,7 +119,8 @@ js/
   content/ch2-lti-b.js      dersler 2.5–2.7
   content/formulas.js       formül kağıdı
   content/vize.js           vize hazırlık: soru tipleri haritası ve deneme soruları
-  content/deneme.js         deneme vizeleri (Schaum Bölüm 1 problemleri, Türkçe ve çözümlü)
+  content/deneme.js         deneme vizeleri (Schaum Bölüm 1 problemleri + karma sorular, Türkçe ve çözümlü)
+  trainer.js                antrenman: rastgele soru üreteci, karma sorular, Leitner aralıklı tekrar (DOM'dan bağımsız)
   app.js                    yönlendirme, ders sayfası, ilerleme
 ```
 

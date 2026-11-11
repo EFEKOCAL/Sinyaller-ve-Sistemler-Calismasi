@@ -334,6 +334,66 @@
               T`Çıkış: $y[n] = n(-1)^n = \ldots, -1, 2, -3, 4, \ldots$ Genliği büyüyor, hiçbir $N$ için $y[n+N] = y[n]$ olmaz.`],
             ans: T`$y[n] = n\,x[n]$ ve $x[n] = (-1)^n$. Bir LTI sistem periyodik girişi periyodik tutardı; periyodikliği bozan şey zamanla değişen $n$ çarpanıdır.` }] }
       ]
+    },
+
+    /* ================================================================== */
+    {
+      id: '5', title: 'Karma sorular: periyot ve sistem özellikleri tek soruda',
+      source: 'Bu denemenin soruları sitenin kendi sorularıdır: Schaum 1.16 (periyot) ile 1.33–1.60 (sistem özellikleri) problemlerinin birleştirilmiş, sınav tipi hâli.',
+      blurb: 'Hocanın en olası tarzı: bir giriş sinyali ve bir sistem verilir; temel periyot, lineerlik, ötelemeyle değişmezlik, nedensellik, kararlılık ve çıkışın periyodikliği aynı soruda sorulur. Her ana soru farklı bir “profil” taşır: biri her şeye evet, biri zamanla değişen ve nedensel olmayan, biri kararsız. Rastgele üretilen benzerleri için Antrenman sayfasındaki “Sınav tipi karma soru” modunu kullan.',
+      questions: [
+        { no: 1, title: 'Sürekli zaman: gecikmeli toplayıcı', pts: 33,
+          h: T`$x(t) = 2\cos(3t) + \sin\left(5t - \frac{\pi}{4}\right)$ sinyali $y(t) = x(t-1) + 3x(t)$ sistemine uygulanıyor.`, items: [
+          { no: '1.1', pts: 7, lesson: '1.2', q: T`$x(t)$ periyodik midir? Temel periyodu nedir?`,
+            steps: [T`$T_1 = \frac{2\pi}{3}$, $\;T_2 = \frac{2\pi}{5}$. $\;\frac{T_1}{T_2} = \frac53$: rasyonel ⇒ periyodik.`, T`$3T_1 = 5T_2 = 2\pi$. (Kısa yol: EBOB(3, 5) = 1 ⇒ $T_0 = 2\pi$.) Faz $-\frac{\pi}{4}$ ve genlik 2 periyodu etkilemez.`],
+            ans: T`$T_0 = 2\pi$` },
+          { no: '1.2', pts: 5, lesson: '1.8', q: T`Sistem lineer midir?`,
+            steps: [T`$x = ax_1 + bx_2$ ⇒ $y = [ax_1 + bx_2](t-1) + 3[ax_1 + bx_2](t) = a[x_1(t-1) + 3x_1(t)] + b[x_2(t-1) + 3x_2(t)] = ay_1 + by_2$`], ans: T`Lineer.` },
+          { no: '1.3', pts: 5, lesson: '1.10', q: T`Sistem ötelemeyle (zamanla) değişmez midir?`,
+            steps: [T`Girişi kaydır: $T\{x(t-t_0)\} = x(t-1-t_0) + 3x(t-t_0)$.`, T`Çıkışı kaydır: $y(t-t_0) = x(t-t_0-1) + 3x(t-t_0)$. Aynı.`], ans: T`Zamanla değişmez (kuralda $x$’in dışında açık $t$ yok, katsayılar sabit).` },
+          { no: '1.4', pts: 5, lesson: '1.9', q: T`Sistem nedensel midir? Bellekli midir?`,
+            steps: [T`Argümanlar $t-1$ ve $t$, ikisi de $\le t$: nedensel. $t-1$ geçmişe baktığı için bellekli.`], ans: T`Nedensel, bellekli.` },
+          { no: '1.5', pts: 5, lesson: '1.11', q: T`Sistem kararlı mıdır?`,
+            steps: [T`$|x(t)| \le B$ ⇒ $|y(t)| \le |x(t-1)| + 3|x(t)| \le 4B$.`], ans: T`Kararlı.` },
+          { no: '1.6', pts: 6, lesson: '1.10', q: T`Çıkış $y(t)$ periyodik midir? Periyodikse periyodu nedir?`,
+            hint: T`Sistem zamanla değişmez. $x(t + T_0) = x(t)$ ise $y(t + T_0)$ nedir?`,
+            steps: [T`$y(t + 2\pi) = x(t + 2\pi - 1) + 3x(t + 2\pi) = x(t-1) + 3x(t) = y(t)$. Yani $y$ de $2\pi$ ile periyodik.`,
+              T`Daha küçük bir periyot olabilir mi? Çıkışta yine $3$ ve $5$ frekanslı bileşenler var (sistem onları silmiyor, yalnızca genlik ve fazlarını değiştiriyor), bu yüzden temel periyot yine $2\pi$.`,
+              T`<strong>Genel kural:</strong> Zamanla değişmez <em>her</em> sistem (lineer olmasa bile) $T_0$ periyotlu bir girişe $T_0$ ile periyodik bir çıkış verir: $y(t+T_0) = T\{x(t+T_0)\} = T\{x(t)\} = y(t)$.`],
+            ans: T`Periyodik, $T_0 = 2\pi$.` }] },
+        { no: 2, title: 'Sürekli zaman: zaman sıkıştırıcı', pts: 33,
+          h: T`$x(t) = \cos\left(\frac{\pi}{2}t\right) + \cos\left(\frac{\pi}{3}t\right)$ sinyali $y(t) = x(2t)$ sistemine uygulanıyor.`, items: [
+          { no: '2.1', pts: 7, lesson: '1.2', q: T`$x(t)$’nin temel periyodu nedir?`,
+            steps: [T`$T_1 = \frac{2\pi}{\pi/2} = 4$, $\;T_2 = \frac{2\pi}{\pi/3} = 6$. $\;\frac{T_1}{T_2} = \frac23$ rasyonel.`, T`$T_0 = \text{EKOK}(4, 6) = 12$ ($3T_1 = 2T_2 = 12$).`], ans: T`$T_0 = 12$` },
+          { no: '2.2', pts: 5, lesson: '1.8', q: T`Sistem lineer midir?`,
+            steps: [T`$T\{ax_1 + bx_2\} = ax_1(2t) + bx_2(2t) = ay_1 + by_2$.`], ans: T`Lineer.` },
+          { no: '2.3', pts: 6, lesson: '1.10', q: T`Sistem ötelemeyle değişmez midir?`,
+            steps: [T`Girişi kaydır: $x_1(t) = x(t-t_0)$ ⇒ $y_1(t) = x_1(2t) = x(2t - t_0)$.`, T`Çıkışı kaydır: $y(t-t_0) = x(2(t-t_0)) = x(2t - 2t_0)$.`, T`$t_0 \ne 2t_0$: farklı.`],
+            ans: T`Zamanla değişen. (Kaydırma, sıkıştırma yüzünden yarıya iniyor.)` },
+          { no: '2.4', pts: 5, lesson: '1.9', q: T`Sistem nedensel midir?`,
+            steps: [T`$t = 1$ için $y(1) = x(2)$: gelecekteki giriş.`], ans: T`Nedensel değil. (Not: $t<0$ için $2t < t$, geçmişe bakıyor; ama tek bir $t$ bile gelecek kullanırsa nedensel değildir.)` },
+          { no: '2.5', pts: 4, lesson: '1.11', q: T`Sistem kararlı mıdır?`, steps: [T`$|y(t)| = |x(2t)| \le B$.`], ans: T`Kararlı.` },
+          { no: '2.6', pts: 6, lesson: '1.7', q: T`Çıkış periyodik midir? Periyodu nedir?`,
+            hint: T`$y(t)$’yi açıkça yaz.`,
+            steps: [T`$y(t) = x(2t) = \cos(\pi t) + \cos\left(\frac{2\pi}{3}t\right)$.`, T`$T_1 = 2$, $T_2 = 3$ ⇒ $T_0 = 6$.`,
+              T`Sistem zamanla değişen olduğu halde çıkış periyodik çıktı: zaman sıkıştırması periyodu yarıya indirir ($12 \to 6$). Zamanla değişen sistemlerde periyodiklik <em>garanti değildir</em>, ama bu örnekte korunuyor.`],
+            ans: T`Periyodik, $T_0 = 6$ (girişin periyodunun yarısı).` }] },
+        { no: 3, title: 'Ayrık zaman: zamanla büyüyen kazanç', pts: 34,
+          h: T`$x[n] = \cos\left(\frac{\pi}{4}n\right) + \sin\left(\frac{\pi}{6}n\right)$ dizisi $y[n] = n\,x[n-1]$ sistemine uygulanıyor.`, items: [
+          { no: '3.1', pts: 8, lesson: '1.2', q: T`$x[n]$ periyodik midir? Temel periyodu nedir?`,
+            steps: [T`$\frac{\pi/4}{2\pi} = \frac18$ ⇒ $N_1 = 8$. $\;\frac{\pi/6}{2\pi} = \frac{1}{12}$ ⇒ $N_2 = 12$.`, T`$N_0 = \text{EKOK}(8, 12) = 24$.`], ans: T`$N_0 = 24$` },
+          { no: '3.2', pts: 5, lesson: '1.8', q: T`Sistem lineer midir?`,
+            steps: [T`$n[ax_1 + bx_2][n-1] = a\,n x_1[n-1] + b\,n x_2[n-1] = ay_1 + by_2$. $n$ girişten bağımsız bir katsayı.`], ans: T`Lineer.` },
+          { no: '3.3', pts: 6, lesson: '1.10', q: T`Sistem ötelemeyle değişmez midir?`,
+            steps: [T`Girişi kaydır: $T\{x[n-n_0]\} = n\,x[n-1-n_0]$.`, T`Çıkışı kaydır: $y[n-n_0] = (n-n_0)\,x[n-n_0-1]$.`, T`$n \ne n - n_0$.`], ans: T`Zamanla değişen (açık $n$ çarpanı).` },
+          { no: '3.4', pts: 4, lesson: '1.9', q: T`Sistem nedensel midir?`, steps: [T`Tek argüman $n-1 < n$.`], ans: T`Nedensel (ve bellekli).` },
+          { no: '3.5', pts: 5, lesson: '1.11', q: T`Sistem kararlı mıdır?`,
+            steps: [T`Karşı örnek: $x[n] = 1$ (sınırlı) ⇒ $y[n] = n$, sınırsız büyür.`], ans: T`Kararsız.` },
+          { no: '3.6', pts: 6, lesson: '1.10', q: T`Bu girişe karşılık çıkış periyodik midir?`,
+            steps: [T`$y[n + 24] = (n + 24)\,x[n + 23] = (n+24)\,x[n-1]$, ama $y[n] = n\,x[n-1]$. $x[n-1] \ne 0$ olan $n$’lerde ikisi farklı.`,
+              T`Genlik $n$ ile büyüdüğü için hiçbir $N$ için $y[n+N] = y[n]$ olamaz.`],
+            ans: T`Periyodik değil. Periyodikliği bozan, zamanla değişen $n$ çarpanı. (Zamanla değişmez bir sistem bunu yapamazdı.)` }] }
+      ]
     }
   ];
 })();

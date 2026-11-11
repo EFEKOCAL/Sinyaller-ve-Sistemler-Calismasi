@@ -58,13 +58,16 @@
     const top = [
       ['#/', '★', 'Başlangıç', route === 'home'],
       ['#/vize', '✎', 'Vize hazırlık', route === 'vize'],
+      ['#/antrenman', '⟳', 'Antrenman', route === 'antrenman'],
       ['#/deneme', '⏱', 'Deneme vizeleri', route === 'deneme'],
       ['#/formuller', '∑', 'Formül kağıdı', route === 'formuller'],
       ['#/lab', '⚗', 'Laboratuvarlar', route === 'lab']
     ];
+    const nDue = dueSkills().length;
     for (const [href, num, title, cur] of top) {
       nav.append(el('a', { class: 'nav-item', href, 'aria-current': cur ? 'page' : null },
-        el('span', { class: 'nav-num' }, num), el('span', null, title), el('span')));
+        el('span', { class: 'nav-num' }, num), el('span', null, title),
+        href === '#/antrenman' && nDue ? el('span', { class: 'nav-due', title: 'Bugün tekrar edilecek beceri' }, String(nDue)) : el('span')));
     }
     for (const ch of CHAPTERS) {
       nav.append(el('div', { class: 'nav-group' }, ch.title, ch.exam ? null : el('span', { class: 'badge-out' }, 'vize dışı')));
@@ -283,6 +286,8 @@
     };
     paintDone();
     foot.append(el('div', { class: 'done-row' }, doneBtn, el('span', { class: 'think' }, 'Ödevleri çözmeden işaretleme: sınavda gelen sorular onlara çok benzer.')));
+    const lsk = SS.trainer ? SS.trainer.SKILLS.filter((s) => s.lesson === l.id) : [];
+    if (lsk.length) foot.append(box('box-recipe', '⟳ Kalıcı hâle getir', 'Bu dersin becerisini (' + lsk.map((s) => s.name).join(', ') + ') <a href="#/antrenman"><strong>Antrenman</strong></a> sayfasında rastgele sorularla çalış. Panodaki kartına tıkla: 8 soru, her birinin gerekçesiyle. Yarın ve 3 gün sonra tekrar karşına çıkacak.'));
     const pager = el('nav', { class: 'pager', 'aria-label': 'Ders gezinme' });
     const prev = all[idx - 1], next = all[idx + 1];
     if (prev) pager.append(el('a', { href: '#/ders/' + prev.id }, el('small', null, '← Önceki'), prev.id + ' ' + prev.title));
@@ -319,11 +324,14 @@
     const firstUndone = examLessons().find((l) => !isDone(l.id)) || examLessons()[0];
     const cta = el('div', { class: 'cta-row' });
     if (firstUndone) cta.append(el('a', { class: 'btn btn-primary', href: '#/ders/' + firstUndone.id }, (Object.keys(progress.done).some((k) => progress.done[k]) ? 'Kaldığın yerden devam et: ' : 'Başla: ') + firstUndone.id + ' ' + firstUndone.title));
+    cta.append(el('a', { class: 'btn', href: '#/antrenman' }, 'Antrenman'));
     cta.append(el('a', { class: 'btn', href: '#/vize' }, 'Vize hazırlık'));
     cta.append(el('a', { class: 'btn', href: '#/deneme' }, 'Deneme vizeleri'));
     cta.append(el('a', { class: 'btn', href: '#/formuller' }, 'Formül kağıdı'));
     cta.append(el('a', { class: 'btn', href: '#/lab' }, 'Tüm laboratuvarlar'));
     hero.append(cta);
+    const due = dueSkills();
+    if (due.length) hero.append(box('box-recipe', '⟳ Bugünkü tekrar', 'Unutmaya başladığın ' + due.length + ' beceri var: ' + due.map((s) => s.name).join(', ') + '. <a href="#/antrenman"><strong>Antrenmanda 10 soruluk karışık tekrar</strong></a> yaklaşık 10 dakika sürer.'));
     page.append(hero);
 
     page.append(el('h2', null, 'Her ders aynı döngüyü izler'));
@@ -452,7 +460,7 @@
     const bar = el('div', { class: 'card-actions' });
     bar.append(SS.ui.button('Bütün çözümleri aç', () => page.querySelectorAll('.card-q').forEach((c) => { const b = [...c.querySelectorAll('button')].find((x) => x.textContent === 'Tümünü göster' && x.style.display !== 'none'); if (b) b.click(); }), ''),
       SS.ui.button('Bütün çözümleri gizle', () => page.querySelectorAll('.card-q').forEach((c) => { const b = [...c.querySelectorAll('button')].find((x) => x.textContent === 'Gizle' && x.style.display !== 'none'); if (b) b.click(); }), 'btn-quiet'),
-      el('span', { class: 'think' }, 'Kaynak: H. Hsu, Schaum’s Outline of Signals and Systems (2. baskı), Bölüm 1. Sorular Türkçeleştirildi, çözümler adım adım yeniden yazıldı.'));
+      el('span', { class: 'think' }, ex.source || 'Kaynak: H. Hsu, Schaum’s Outline of Signals and Systems (2. baskı), Bölüm 1. Sorular Türkçeleştirildi, çözümler adım adım yeniden yazıldı.'));
     page.append(bar);
     for (const q of ex.questions) {
       page.append(renderBlock({ t: 'mq', no: q.no, title: q.title, pts: q.pts, h: q.h }));
@@ -472,6 +480,134 @@
     return page;
   }
 
+  /* ---------------- Antrenman (aralıklı tekrar + karışık pratik) ---------------- */
+  const tstore = {
+    read() { try { return JSON.parse(localStorage.getItem('ss-trainer') || '{}'); } catch (e) { return {}; } },
+    write(v) { try { localStorage.setItem('ss-trainer', JSON.stringify(v)); } catch (e) { /* yok say */ } }
+  };
+  const tstate = tstore.read();
+  tstate.stats = tstate.stats || {};
+  const skillName = (id) => ((SS.trainer && SS.trainer.SKILLS.find((s) => s.id === id)) || { name: id }).name;
+  function dueSkills() {
+    const TR = SS.trainer; if (!TR) return [];
+    const d = TR.today();
+    return TR.SKILLS.filter((s) => { const st = tstate.stats[s.id]; return st && st.t && TR.due(st, d); });
+  }
+
+  function pageAntrenman() {
+    const TR = SS.trainer;
+    const page = el('div', { class: 'page' });
+    page.append(el('div', { class: 'crumb' }, el('span', { class: 'pill pill-ok' }, 'Bölüm 1 · vize becerileri')));
+    page.append(el('h1', null, 'Antrenman'));
+    page.append(el('p', { class: 'lead', html: R('Okumak tanıdık hissettirir; <strong>hatırlamaya çalışmak</strong> kalıcı yapar. Burada her soru rastgele üretilir, yani ezberlenemez. Doğru ya da yanlış, her cevaptan sonra kısa bir gerekçe görürsün. Zorlandığın beceriler daha sık, öğrendiklerin aralıklarla (1, 3, 7 gün) karşına çıkar.') }));
+    const dash = el('div', { class: 'skill-grid' });
+    const area = el('div', { id: 'trainArea' });
+    const modes = el('div', { class: 'cta-row' });
+    modes.append(
+      SS.ui.button('▶ Karışık tekrar (10 soru)', () => start('mix'), 'btn-primary'),
+      SS.ui.button('Sınav tipi karma soru (5 soru)', () => start('karma'), ''),
+      el('span', { class: 'think' }, 'Karma soru: tek soruda periyot + lineerlik + öteleme + nedensellik + kararlılık, hocanın tarzında.'));
+    page.append(modes, el('h2', null, 'Beceri panosu'), dash, area);
+
+    function paintDash() {
+      dash.innerHTML = '';
+      const d = TR.today();
+      for (const s of TR.SKILLS) {
+        const st = tstate.stats[s.id];
+        const box = st ? st.box || 0 : 0;
+        const acc = st && st.t ? Math.round((100 * st.c) / st.t) : null;
+        const badge = !st || !st.t ? el('span', { class: 'sk-badge sk-new' }, 'yeni') : TR.due(st, d) ? el('span', { class: 'sk-badge sk-due' }, 'bugün tekrar') : el('span', { class: 'sk-badge sk-ok' }, ((n) => (n <= 1 ? 'tekrar: yarın' : 'tekrar: ' + n + ' gün sonra'))(TR.INTERVAL[box] - (d - st.last)));
+        const card = el('button', { type: 'button', class: 'skill-card', title: 'Bu beceriyi çalış (8 soru)' },
+          el('span', { class: 'sk-top' }, el('span', { class: 'sk-name', html: R(s.name) }), badge),
+          el('span', { class: 'sk-level', 'aria-label': 'Seviye ' + box + '/3' }, [0, 1, 2].map((i) => el('i', { class: i < box ? 'on' : '' }))),
+          el('span', { class: 'sk-acc' }, acc === null ? 'henüz çözülmedi' : '%' + acc + ' doğru · ' + st.t + ' cevap'),
+          el('span', { class: 'sk-lesson' }, 'Ders ' + s.lesson));
+        card.addEventListener('click', () => start('skill', s.id));
+        dash.append(card);
+      }
+    }
+
+    let session = null;
+    function start(mode, skill) {
+      const n = mode === 'karma' ? 5 : mode === 'skill' ? 8 : 10;
+      const groups = mode === 'karma' ? Array.from({ length: n }, () => TR.genKarma())
+        : mode === 'skill' ? Array.from({ length: n }, () => TR.SKILLS.find((s) => s.id === skill).gen())
+          : TR.mixedSession(tstate.stats, n);
+      session = { mode, skill, groups, i: 0, res: [] };
+      showGroup();
+      area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function showGroup() {
+      area.innerHTML = '';
+      const g = session.groups[session.i];
+      const card = el('article', { class: 'card train-card' });
+      const head = el('div', { class: 'card-head' },
+        el('span', { class: 'tag tag-q' }, (session.i + 1) + ' / ' + session.groups.length),
+        el('span', { class: 'card-title' }, session.mode === 'karma' ? 'Sınav tipi karma soru' : session.mode === 'skill' ? skillName(session.skill) : 'Karışık tekrar'),
+        el('div', { class: 'bar train-bar' }, el('span', { style: { width: (100 * session.i) / session.groups.length + '%' } })));
+      const body = el('div', { class: 'card-body' });
+      if (g.stem) body.append(el('div', { class: 'card-q', html: R(g.stem) }));
+      let left = g.parts.length;
+      const next = SS.ui.button(session.i + 1 < session.groups.length ? 'Sonraki soru →' : 'Sonuçları gör', () => { session.i++; session.i < session.groups.length ? showGroup() : summary(); }, 'btn-primary');
+      next.style.display = 'none';
+      g.parts.forEach((p, pi) => {
+        const box2 = el('div', { class: 'qz' });
+        const lbl = g.parts.length > 1 ? '<span class="tag tag-src">' + (pi + 1) + ') ' + skillName(p.skill) + '</span> ' : '';
+        box2.append(el('div', { class: 'qz-q', html: lbl + R(p.q) }));
+        const opts = el('div', { class: 'qz-opts' + (p.opts.length === 2 ? ' qz-yn' : '') });
+        const why = el('div');
+        const btns = p.opts.map((o, oi) => {
+          const b = el('button', { type: 'button', class: 'qz-opt', html: R(o) });
+          b.addEventListener('click', () => {
+            const ok = oi === p.a;
+            btns.forEach((x, k) => { x.disabled = true; if (k === p.a) x.classList.add('right'); });
+            if (!ok) b.classList.add('wrong');
+            why.append(el('div', { class: 'qz-why', html: R((ok ? '<strong>Doğru.</strong> ' : '<strong>Yanlış.</strong> ') + p.why) }));
+            SS.fixMath(why);
+            TR.record(tstate.stats, p.skill, ok, TR.today());
+            tstore.write(tstate);
+            session.res.push({ skill: p.skill, ok });
+            if (--left === 0) { next.style.display = ''; next.focus({ preventScroll: true }); }
+          });
+          opts.append(b);
+          return b;
+        });
+        box2.append(opts, why);
+        body.append(box2);
+      });
+      body.append(el('div', { class: 'card-actions' }, next, el('span', { class: 'think' }, 'Önce kâğıtta çöz, sonra şıkkı seç.')));
+      card.append(head, body);
+      area.append(card);
+      SS.fixMath(area);
+    }
+
+    function summary() {
+      paintDash();
+      area.innerHTML = '';
+      const tot = session.res.length, ok = session.res.filter((r) => r.ok).length;
+      const by = {};
+      session.res.forEach((r) => { by[r.skill] = by[r.skill] || [0, 0]; by[r.skill][1]++; if (r.ok) by[r.skill][0]++; });
+      const weak = Object.keys(by).filter((k) => by[k][0] / by[k][1] < 0.7);
+      const box2 = el('div', { class: 'box ' + (ok / tot >= 0.8 ? 'box-recipe' : 'box-idea') });
+      box2.append(el('div', { class: 'box-title' }, 'Oturum sonucu: ' + ok + ' / ' + tot + ' doğru'));
+      box2.append(el('ul', null, Object.keys(by).map((k) => el('li', { html: R(skillName(k) + ': ' + by[k][0] + '/' + by[k][1]) }))));
+      if (weak.length) box2.append(el('p', { html: 'Tekrar et: ' + weak.map((k) => { const s = SS.trainer.SKILLS.find((x) => x.id === k); return s ? '<a href="#/ders/' + s.lesson + '">' + s.name + ' (Ders ' + s.lesson + ')</a>' : k; }).join(', ') + '. Dersin <strong>çözüm reçetesi</strong> kutusuna bak, sonra bu beceriyi panodan tek başına çalış.' }));
+      else box2.append(el('p', null, 'Bu oturumda zayıf beceri yok. Yarın karışık tekrarla devam et.'));
+      box2.append(el('div', { class: 'card-actions' }, SS.ui.button('Aynı modda yeni oturum', () => start(session.mode, session.skill), 'btn-primary')));
+      area.append(box2);
+      SS.fixMath(area);
+    }
+
+    if (!TR) { page.append(el('p', null, 'Antrenman motoru yüklenemedi.')); return page; }
+    paintDash();
+    page.append(box('box-idea', 'Neden böyle çalışıyor?', '<strong>Geri çağırma:</strong> cevabı görmeden önce kendin üretmeye çalışmak, okumaktan çok daha kalıcıdır. <strong>Karıştırma:</strong> soru tipleri karışık gelince “bu hangi yöntem?” kararını sınavdaki gibi her seferinde yeniden verirsin. <strong>Aralıklı tekrar:</strong> öğrendiğin beceri unutmaya başladığın anda (1, 3, 7 gün sonra) geri gelir. Günde 10 dakika yeter. İlerleme yalnızca bu tarayıcıda saklanır.'));
+    page.append(el('p', { class: 'think', html: '<button type="button" class="btn btn-quiet" id="resetTrain">Antrenman istatistiklerini sıfırla</button>' }));
+    setTimeout(() => { const b = document.getElementById('resetTrain'); if (b) b.addEventListener('click', () => { if (confirm('Antrenman istatistikleri silinsin mi?')) { tstate.stats = {}; tstore.write(tstate); paintDash(); } }); });
+    document.title = 'Antrenman · Sinyal Defteri';
+    return page;
+  }
+
   function pageNotFound() {
     return el('div', { class: 'page' }, el('h1', null, 'Sayfa bulunamadı'), el('p', null, el('a', { href: '#/' }, 'Ana sayfaya dön')));
   }
@@ -487,6 +623,7 @@
     else if (parts[0] === 'formuller') { node = pageFormulas(); key = 'formuller'; }
     else if (parts[0] === 'vize') { node = pageVize(); key = 'vize'; }
     else if (parts[0] === 'deneme') { node = pageDeneme(parts[1]); key = 'deneme'; }
+    else if (parts[0] === 'antrenman') { node = pageAntrenman(); key = 'antrenman'; }
     else if (parts[0] === 'lab') { node = pageLabs(parts[1]); key = 'lab'; }
     else { node = pageNotFound(); key = '404'; }
     main.innerHTML = '';
