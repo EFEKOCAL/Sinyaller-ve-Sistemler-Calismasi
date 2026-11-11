@@ -23,7 +23,14 @@
     goals: ['$u$, $\\delta$, $r$ arasındaki türev zinciri', 'Elek (sifting) özelliğiyle integral almak', '$\\Pi$ ve $\\Lambda$’yı kaydırıp ölçeklemek', 'Darbeyi basamaklarla, üçgeni rampalarla yazmak'],
     blocks: [
       { t: 'h', h: 'Birim basamak u(t)', src: 's. 28' },
-      { t: 'def', h: T`$$u(t) = \begin{cases} 1 & t > 0 \\ 0 & t < 0 \end{cases}$$ Bir sinyali $u(t)$ ile çarpmak, onu $t=0$’da <strong>açan bir anahtar</strong> gibidir: $\;x(t)u(t) = x(t)$ ($t>0$), $0$ ($t<0$).` },
+      { t: 'def', h: T`$$u(t) = \begin{cases} 1 & t > 0 \\ 0 & t < 0 \end{cases}$$
+<strong>$u(t)$ ile çarpmak = $t=0$’da açılan bir anahtar.</strong> Bir $x(t)$ sinyalini $u(t)$ ile çarptığında sinyalin sağ tarafı ($t>0$) aynen kalır, sol tarafı ($t<0$) silinip 0 olur:
+$$x(t)\,u(t) = \begin{cases} x(t) & t > 0 \\ 0 & t < 0 \end{cases}$$
+<strong>Neden?</strong> Her $t$ anında iki sayıyı çarpıyorsun:<br>
+• $t > 0$ iken $u(t) = 1$ olduğu için $x(t)\cdot 1 = x(t)$, yani sinyal olduğu gibi geçer (anahtar <em>açık</em>).<br>
+• $t < 0$ iken $u(t) = 0$ olduğu için $x(t)\cdot 0 = 0$, yani sinyal kesilir (anahtar <em>kapalı</em>).<br>
+<strong>Örnek:</strong> $\cos t$ her yerde salınır. $\cos t\cdot u(t)$ ise $t<0$’da 0, $t>0$’da $\cos t$ olur, yani salınım $t=0$’da başlar. Aşağıdaki şekilde kesikli çizgi $x(t)$, dolu çizgi $x(t)u(t)$.<br>
+<strong>Kaydırılmış hâli:</strong> $x(t)\,u(t-a)$ sinyali, anahtarı $t = a$’da açar. $t<a$ kısmı 0 olur, $t>a$ kısmı aynen kalır.` },
       { t: 'fig', fig: [spec([-3, 4], [-0.3, 1.4], [fn(u, 'x')], { title: 'u(t)' }), spec([-3, 4], [-1.2, 1.6], [fn((t) => Math.sin(1.6 * t) * 0.6 + 0.5 + 0.2 * Math.cos(3 * t), 'muted', { fill: false, dash: [5, 4], w: 1.4 }), fn((t) => (t >= 0 ? Math.sin(1.6 * t) * 0.6 + 0.5 + 0.2 * Math.cos(3 * t) : 0), 'x')], { title: 'x(t)·u(t): t<0 kısmı silinir' })] },
 
       { t: 'h', h: 'Birim impuls δ(t)', src: 's. 29–30' },
