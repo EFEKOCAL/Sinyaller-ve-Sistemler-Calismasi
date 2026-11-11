@@ -167,8 +167,8 @@ $$P = \lim_{T\to\infty} \frac{1}{T}\int_{-T/2}^{T/2} |x(t)|^2\,dt \qquad\qquad P
 $$\sum_{n=0}^{\infty} n\alpha^n = \frac{\alpha}{(1-\alpha)^2} \qquad \sum_{n=0}^{\infty} n^2\alpha^n = \frac{\alpha^2+\alpha}{(1-\alpha)^3} \qquad (|\alpha|<1)$$` },
       { t: 'recipe', steps: [
         T`$|x|^2$’yi yaz. Karmaşık sinyallerde $|e^{j\theta}| = 1$ kullan, örneğin $|10e^{j2n}| = 10$.`,
-        T`Sinyal sönüyor veya sınırlı bir aralıkta mı? Önce $E$’yi hesapla. Sonluysa enerji sinyalidir.`,
-        T`Sinyal periyodik veya sabite yaklaşıyorsa $P$’yi hesapla (periyodikse bir periyot üzerinden). Sonlu ve sıfırdan farklıysa güç sinyalidir.`,
+        T`Sinyal sönüyor veya sınırlı bir aralıkta mı? Önce $E$’yi hesapla. $0 < E < \infty$ (sonlu ve sıfırdan farklı) ise enerji sinyalidir. Bu durumda $P = 0$ çıkar, yani güç sinyali olamaz.`,
+        T`Sinyal periyodik veya sabite yaklaşıyorsa $P$’yi hesapla (periyodikse bir periyot üzerinden). $0 < P < \infty$ (sonlu ve sıfırdan farklı) ise güç sinyalidir. Bu durumda $E = \infty$ çıkar, yani enerji sinyali olamaz.`,
         T`$|x|^2$ büyüyorsa ($t$, $e^{t}$ gibi) ikisi de sonsuzdur: hiçbiri.`] },
       { t: 'example', src: 's. 18', title: 'Dört hızlı örnek', q: T`(a) $x[n] = 4(0.5)^n$, $n \ge 0$ &nbsp; (b) $x[n] = 2\cos\left(\frac{2\pi}{4}n\right)$ &nbsp; (c) $x(t) = 3e^{-t}$, $t \ge 0$ &nbsp; (d) $x(t) = 3\cos\left(\frac{\pi}{8}t\right)$`,
         steps: [T`(a) $E = \sum_{n=0}^{\infty} 16(0.25)^n = \frac{16}{1 - 0.25} = \frac{64}{3}$. Sonlu: <strong>enerji</strong>.`,
