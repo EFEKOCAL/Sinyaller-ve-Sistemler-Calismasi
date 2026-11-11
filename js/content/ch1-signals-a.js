@@ -206,10 +206,15 @@ $$\sum_{n=0}^{\infty} n\alpha^n = \frac{\alpha}{(1-\alpha)^2} \qquad \sum_{n=0}^
     goals: ['Çift ve tek tanımı', 'Çift/tek bileşen formülleri', 'Çarpımın tekliği/çiftliği', 'Ayrık sinyalde ayrıştırma'],
     blocks: [
       { t: 'idea', h: T`<strong>Çift</strong> sinyal dikey eksende <em>ayna</em> gibidir: sol ve sağ taraf aynıdır ($\cos t$, $t^2$, $|t|$). <strong>Tek</strong> sinyal ise orijin etrafında 180° döndürülünce kendisine oturur: sağ taraf, sol tarafın baş aşağı hâlidir ($\sin t$, $t$, $t^3$). Tek sinyalin $t=0$’daki değeri her zaman 0’dır.` },
-      { t: 'def', title: 'Tanım ve ayrıştırma (s. 22)', h: T`Çift: $x(t) = x(-t)$ &nbsp;&nbsp;&nbsp; Tek: $x(t) = -x(-t)$
-$$x(t) = x_e(t) + x_o(t), \qquad x_e(t) = \frac{x(t) + x(-t)}{2}, \qquad x_o(t) = \frac{x(t) - x(-t)}{2}$$
+      { t: 'def', title: 'Tanım ve ayrıştırma (s. 22)', h: T`Çift: $x(t) = x(-t)$ &nbsp;&nbsp;&nbsp; Tek: $x(t) = -x(-t)$<br>
+<strong>Her sinyal, çift bileşeni ile tek bileşeninin toplamına eşittir:</strong>
+$$x(t) = \underbrace{x_e(t)}_{\text{çift bileşen}} + \underbrace{x_o(t)}_{\text{tek bileşen}}$$
+<strong>Çift bileşen</strong> $x_e(t)$ (e: <em>even</em>, çift), sinyal ile aynasının toplamının yarısıdır:
+$$x_e(t) = \frac{x(t) + x(-t)}{2}$$
+<strong>Tek bileşen</strong> $x_o(t)$ (o: <em>odd</em>, tek), sinyal ile aynasının farkının yarısıdır:
+$$x_o(t) = \frac{x(t) - x(-t)}{2}$$
 Ayrık zamanda aynısı geçerli: $x_e[n] = \frac{x[n] + x[-n]}{2}$, $\;x_o[n] = \frac{x[n] - x[-n]}{2}$.` },
-      { t: 'p', h: T`Neden işe yarıyor? $x_e(-t) = \frac{x(-t)+x(t)}{2} = x_e(t)$, yani çift. $x_o(-t) = \frac{x(-t)-x(t)}{2} = -x_o(t)$, yani tek. Toplamları da $x_e + x_o = x$ olur.` },
+      { t: 'p', h: T`Neden işe yarıyor? $x_e(-t) = \frac{x(-t)+x(t)}{2} = x_e(t)$, yani çift. $x_o(-t) = \frac{x(-t)-x(t)}{2} = -x_o(t)$, yani tek. Toplamları da $x_e + x_o = x$ olur: çift bileşen ile tek bileşeni toplayınca sinyalin kendisi geri gelir.` },
       { t: 'table', head: ['Çarpım (s. 27)', 'Sonuç', 'Neden?'], rows: [
         ['çift × çift', 'çift', '$x_1(-t)x_2(-t) = x_1(t)x_2(t)$'],
         ['tek × tek', 'çift', '$(-x_1)(-x_2) = x_1x_2$'],
