@@ -59,6 +59,7 @@
     const top = [
       ['#/', '★', 'Başlangıç', route === 'home'],
       ['#/vize', '✎', 'Vize hazırlık', route === 'vize'],
+      ['#/tekrar', '↻', 'Hızlı tekrar', route === 'tekrar'],
       ['#/antrenman', '⟳', 'Antrenman', route === 'antrenman'],
       ['#/deneme', '⏱', 'Deneme vizeleri', route === 'deneme'],
       ['#/formuller', '∑', 'Formül kağıdı', route === 'formuller'],
@@ -439,6 +440,18 @@
     return page;
   }
 
+  function pageTekrar() {
+    const Q = SS.quickReview;
+    const page = el('div', { class: 'page' });
+    page.append(el('div', { class: 'crumb' }, el('span', { class: 'pill pill-ok' }, 'Bölüm 1 · soru tipi → işlem basamakları')));
+    page.append(el('h1', null, 'Hızlı tekrar'));
+    if (!Q) return page;
+    page.append(el('p', { class: 'lead', html: R(Q.lead) }));
+    for (const b of Q.blocks) page.append(renderBlock(b, { id: 'tekrar' }));
+    document.title = 'Hızlı tekrar · Sinyal Defteri';
+    return page;
+  }
+
   function pageDeneme(id) {
     const sets = SS.examSets || [];
     const page = el('div', { class: 'page' });
@@ -626,6 +639,7 @@
     else if (parts[0] === 'ders') { node = pageLesson(decodeURIComponent(parts[1] || '')); key = 'ders/' + parts[1]; }
     else if (parts[0] === 'formuller') { node = pageFormulas(); key = 'formuller'; }
     else if (parts[0] === 'vize') { node = pageVize(); key = 'vize'; }
+    else if (parts[0] === 'tekrar') { node = pageTekrar(); key = 'tekrar'; }
     else if (parts[0] === 'deneme') { node = pageDeneme(parts[1]); key = 'deneme'; }
     else if (parts[0] === 'antrenman') { node = pageAntrenman(); key = 'antrenman'; }
     else if (parts[0] === 'lab') { node = pageLabs(parts[1]); key = 'lab'; }
